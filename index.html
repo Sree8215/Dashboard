@@ -347,14 +347,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
           <div class="card" style="flex:1;min-height:0">
             <div class="card-header">
               <span class="card-title">Robot Cam — Unit R03</span>
-              <div style="display:flex;gap:8px">
+              <div style="display:flex;gap:8px;align-items:center">
+                <input type="file" id="photoFileInput" accept="image/*" style="display:none">
+                <button id="uploadPhotoBtn" style="font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer">📷 Upload Site Photo</button>
                 <span class="chip live">● REC</span>
                 <span class="chip">30 FPS</span>
               </div>
             </div>
             <div class="card-body" style="padding:12px">
               <div class="robot-feed" id="robotFeed" style="height:240px">
-                <canvas id="feedCanvas"></canvas>
+                <img id="sitePhoto" src="SITE_IMAGE.jpeg" alt="Site View"
+                  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;transition:opacity .8s;border-radius:0;z-index:0;">
+                <canvas id="feedCanvas" style="z-index:1;position:absolute;inset:0;width:100%;height:100%"></canvas>
                 <div class="feed-overlay">
                   <div class="scan-line"></div>
                   <div class="corner tl"></div><div class="corner tr"></div>
@@ -852,6 +856,20 @@ setInterval(updateClock,1000); updateClock();
 (function() {
   const canvas = document.getElementById('feedCanvas');
   const feed = document.getElementById('robotFeed');
+  const siteImg = document.getElementById('sitePhoto');
+
+  // Photo upload trigger
+  const uploadBtn = document.getElementById('uploadPhotoBtn');
+  const fileInput = document.getElementById('photoFileInput');
+  uploadBtn.addEventListener('click',()=>fileInput.click());
+  fileInput.addEventListener('change',e=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const url = URL.createObjectURL(file);
+    siteImg.src = url;
+    siteImg.onload = ()=>{ siteImg.style.opacity='1'; uploadBtn.textContent='📷 Change Photo'; };
+  });
+
   const resizeObs = new ResizeObserver(()=>{
     canvas.width = feed.offsetWidth;
     canvas.height = feed.offsetHeight;
@@ -867,7 +885,13 @@ setInterval(updateClock,1000); updateClock();
   function draw() {
     const w=canvas.width, h=canvas.height;
     if(!w||!h){requestAnimationFrame(draw);return}
-    ctx.fillStyle='#060810'; ctx.fillRect(0,0,w,h);
+    const hasPhoto = siteImg.complete && siteImg.naturalWidth > 0 && siteImg.getAttribute('src') !== '';
+    if(hasPhoto){
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle='rgba(4,6,14,0.38)'; ctx.fillRect(0,0,w,h);
+    } else {
+      ctx.fillStyle='#060810'; ctx.fillRect(0,0,w,h);
+    }
 
     // Grid
     ctx.strokeStyle='rgba(34,211,238,0.06)';ctx.lineWidth=.5;
