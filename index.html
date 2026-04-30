@@ -127,13 +127,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 }
 
 /* BIM VIEWER */
-.bim-canvas{position:relative;background:#0a0c10;border-radius:6px;overflow:hidden}
-.bim-grid{
-  position:absolute;inset:0;
-  background-image:linear-gradient(rgba(34,211,238,.05) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(34,211,238,.05) 1px,transparent 1px);
-  background-size:40px 40px;
-}
+<div class="bim-canvas" style="height:300px;position:relative">
+  <div class="bim-grid"></div>
+  <img src="BIM_image.jpeg" alt="BIM View"
+    style="position:absolute;inset:0;width:100%;height:100%;
+           object-fit:cover;opacity:0.85;z-index:0;">
+  <canvas id="bimCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:1"></canvas>
 
 /* CLASH */
 .clash-item{
