@@ -329,7 +329,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 <div id="main">
   <div class="topbar">
     <div class="topbar-title" id="page-title">SITE CHECKER</div>
-    <div class="topbar-path" id="page-path" style="color:var(--text3);font-size:11px">PROJECT ALPHA — TOWER C, FLOORS 1–22</div>
+    <div class="topbar-path" id="page-path" style="color:var(--text3);font-size:11px">UNIVERSITY BUILDING — WEIMAR · FLOORS 1–3</div>
     <div class="topbar-right">
       <div class="chip live">● LIVE</div>
       <div class="chip">REVISION 14</div>
@@ -508,10 +508,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
             <span class="chip" id="clashSev">—</span>
           </div>
           <div class="card-body" style="padding:12px;height:calc(100% - 42px)">
-            <div class="bim-canvas" style="height:100%;position:relative">
-              <div class="bim-grid"></div>
-              <canvas id="clashCanvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
-              <div id="clashInfo" style="position:absolute;bottom:12px;left:12px;right:12px;background:rgba(13,15,17,.9);border:1px solid var(--border);border-radius:6px;padding:12px;display:none">
+            <div class="bim-canvas" style="height:100%;position:relative;background:#0a0c10">
+              <img src="Clash.jpeg" alt="Clash View"
+                style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.95;z-index:0;">
+              <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <circle cx="63" cy="57" r="6" fill="none" stroke="#ef4444" stroke-width="0.6" opacity="0.9">
+                  <animate attributeName="r" values="6;9;6" dur="1.8s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="63" cy="57" r="2.2" fill="#ef4444" opacity="1"/>
+                <line x1="65.5" y1="55" x2="73" y2="46" stroke="#ef4444" stroke-width="0.35" opacity="0.85"/>
+                <rect x="73" y="41" width="24" height="7.5" rx="1" fill="rgba(10,5,5,0.88)" stroke="#ef4444" stroke-width="0.35"/>
+                <text x="85" y="46" text-anchor="middle" font-family="Space Mono,monospace" font-size="2.6" fill="#ef4444" font-weight="bold">⚠ DUCT MISPLACED</text>
+              </svg>
+              <div class="bim-grid" style="position:absolute;inset:0;z-index:1;pointer-events:none"></div>
+              <div style="position:absolute;top:8px;left:8px;width:14px;height:14px;border-top:2px solid rgba(245,158,11,.7);border-left:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
+              <div style="position:absolute;top:8px;right:8px;width:14px;height:14px;border-top:2px solid rgba(245,158,11,.7);border-right:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
+              <div style="position:absolute;bottom:8px;left:8px;width:14px;height:14px;border-bottom:2px solid rgba(245,158,11,.7);border-left:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
+              <div style="position:absolute;bottom:8px;right:8px;width:14px;height:14px;border-bottom:2px solid rgba(245,158,11,.7);border-right:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
+              <div id="clashInfo" style="position:absolute;bottom:12px;left:12px;right:12px;background:rgba(13,15,17,.92);border:1px solid var(--border);border-radius:6px;padding:12px;display:none;z-index:4">
                 <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px">CLASH DETAIL</div>
                 <div id="clashDetailText" style="font-size:13px;color:var(--text)"></div>
                 <div id="clashDetailSub" style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px"></div>
