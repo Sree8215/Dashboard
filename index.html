@@ -518,17 +518,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.95;z-index:0;">
               <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <!-- Outer pulsing red ring only -->
-                <circle cx="63" cy="57" r="6" fill="none" stroke="#ef4444" stroke-width="0.7" opacity="0.9">
+                <circle cx="63" cy="57" r="6" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="0.7" opacity="0.9">
                   <animate attributeName="r" values="6;9;6" dur="1.8s" repeatCount="indefinite"/>
                   <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.8s" repeatCount="indefinite"/>
                 </circle>
                 <!-- Solid red dot -->
                 <circle cx="63" cy="57" r="2.2" fill="#ef4444" opacity="1"/>
-                <!-- Leader line -->
-                <line x1="65.5" y1="55" x2="73" y2="46" stroke="#ef4444" stroke-width="0.35" opacity="0.85"/>
-                <!-- Label -->
-                <rect x="73" y="41" width="24" height="7.5" rx="1" fill="rgba(10,5,5,0.88)" stroke="#ef4444" stroke-width="0.35"/>
-                <text x="85" y="46" text-anchor="middle" font-family="Space Mono,monospace" font-size="2.6" fill="#ef4444" font-weight="bold">⚠ DUCT MISPLACED</text>
               </svg>
               <div class="bim-grid" style="position:absolute;inset:0;z-index:1;pointer-events:none"></div>
               <div style="position:absolute;top:8px;left:8px;width:14px;height:14px;border-top:2px solid rgba(245,158,11,.7);border-left:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
@@ -866,7 +861,8 @@ function nav(el) {
   el.classList.add('active');
   const page = el.dataset.page;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
+  const target = document.getElementById('page-'+page);
+  if(target) target.classList.add('active');
   const titles = {
     'site-checker':'SITE CHECKER',
     'clash':'CLASH PREDICTION',
@@ -876,6 +872,7 @@ function nav(el) {
     'conditions':'SITE CONDITIONS'
   };
   document.getElementById('page-title').textContent = titles[page] || page.toUpperCase();
+  if(page === 'progress') setTimeout(buildGantt, 60);
 }
 
 // CLOCK
@@ -1192,7 +1189,7 @@ setInterval(updateClock,1000); updateClock();
 })();
 
 // GANTT CHART
-(function() {
+function buildGantt() {
   const tasks = [
     ['Piling & Substructure',0,20,0,20,'done'],
     ['Ground Beams',15,15,15,15,'done'],
@@ -1209,21 +1206,23 @@ setInterval(updateClock,1000); updateClock();
     ['M&E Commissioning',80,12,0,0,'upcoming'],
     ['Practical Completion',92,8,0,0,'upcoming'],
   ];
-  const months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG'];
   const colors={'done':'var(--green)','late':'var(--red)','active':'var(--amber)','upcoming':'var(--border2)'};
   const cont = document.getElementById('ganttContainer');
+  if(!cont) return;
   cont.innerHTML = tasks.map(([label,ps,pw,as,aw,status])=>{
     const planBar = `<div class="gantt-bar bar-plan" style="left:${ps}%;width:${pw}%"></div>`;
     const actualBar = aw>0?`<div class="gantt-bar" style="left:${as}%;width:${aw}%;background:${colors[status]}"></div>`:'';
     const pct = aw>0?`<span class="gantt-pct">${Math.round(aw/pw*100)}%</span>`:'';
     return `<div class="gantt-row"><div class="gantt-label">${label}</div><div class="gantt-track">${planBar}${actualBar}${pct}</div></div>`;
   }).join('');
-})();
+}
+document.addEventListener('DOMContentLoaded', buildGantt);
 
 // DELIVERY TIMELINE
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
   const now = new Date();
-  document.getElementById('todayDate').textContent = now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  const todayEl = document.getElementById('todayDate');
+  if(todayEl) todayEl.textContent = now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
   const deliveries = [
     {time:'06:50',name:'Formwork Panels F14',detail:'VH-318 · Staging Area B',status:'done'},
     {time:'07:08',name:'Ready-Mix Batch 03',detail:'VH-441 · Level 08 Zone',status:'done'},
@@ -1245,7 +1244,7 @@ setInterval(updateClock,1000); updateClock();
       <div style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid ${col};color:${col};background:${col==='var(--green)'?'var(--green-dim)':col==='var(--amber)'?'var(--amber-dim)':'transparent'};white-space:nowrap">${label}</div>
     </div>`;
   }).join('');
-})();
+});
 
 // GAUGES
 function drawGauge(canvasId, value, max, color) {
@@ -1271,9 +1270,11 @@ function drawGauge(canvasId, value, max, color) {
     ctx.lineTo(cx+outer*Math.cos(a),cy+outer*Math.sin(a)); ctx.stroke();
   }
 }
-drawGauge('gaugeNoise',74,100,'#10b981');
-drawGauge('gaugeCO2',428,1000,'#22d3ee');
-drawGauge('gaugeDust',68,100,'#ef4444');
+document.addEventListener('DOMContentLoaded', function() {
+  drawGauge('gaugeNoise',74,100,'#10b981');
+  drawGauge('gaugeCO2',428,1000,'#22d3ee');
+  drawGauge('gaugeDust',68,100,'#ef4444');
+});
 
 // TREND CHART
 (function() {
