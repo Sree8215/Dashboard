@@ -299,7 +299,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
     <div class="nav-item" data-page="clash" onclick="nav(this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
       Clash Prediction
-      <span class="nav-badge">7</span>
+      <span class="nav-badge">8</span>
     </div>
     <div class="nav-item" data-page="asbuilt" onclick="nav(this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3"/></svg>
@@ -460,11 +460,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       <div style="display:grid;grid-template-columns:420px 1fr;gap:16px;height:calc(100vh - 160px)">
         <div style="overflow-y:auto;padding-right:4px">
           <div style="display:flex;gap:12px;margin-bottom:16px">
-            <div class="stat" style="flex:1"><div class="stat-label">Critical</div><div class="stat-val" style="color:var(--red)">3</div></div>
+            <div class="stat" style="flex:1"><div class="stat-label">Critical</div><div class="stat-val" style="color:var(--red)">4</div></div>
             <div class="stat" style="flex:1"><div class="stat-label">Medium</div><div class="stat-val">4</div></div>
             <div class="stat" style="flex:1"><div class="stat-label">Resolved</div><div class="stat-val" style="color:var(--green)">12</div></div>
           </div>
           <div class="section-title">Active Clashes</div>
+          <div class="clash-item" onclick="selectClash(this,7)" style="border-color:rgba(239,68,68,.35)">
+            <div class="clash-sev sev-high" style="animation:pulse 1.2s infinite"></div>
+            <div class="clash-info"><div class="clash-name">Duct Misplaced — MEP Conflict</div><div class="clash-loc">Floor 02 · Grid C3 · Supply Duct / Structural Beam</div></div>
+            <span class="clash-tag tag-high">CRITICAL</span>
+          </div>
           <div class="clash-item" onclick="selectClash(this,0)">
             <div class="clash-sev sev-high"></div>
             <div class="clash-info"><div class="clash-name">MEP vs Structural Beam</div><div class="clash-loc">Level 09 · Grid D3–D4 · Ductwork / Beam B-09</div></div>
@@ -512,12 +517,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
               <img src="Clash.jpeg" alt="Clash View"
                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.95;z-index:0;">
               <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <circle cx="63" cy="57" r="6" fill="none" stroke="#ef4444" stroke-width="0.6" opacity="0.9">
+                <!-- Outer pulsing red ring only -->
+                <circle cx="63" cy="57" r="6" fill="none" stroke="#ef4444" stroke-width="0.7" opacity="0.9">
                   <animate attributeName="r" values="6;9;6" dur="1.8s" repeatCount="indefinite"/>
                   <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.8s" repeatCount="indefinite"/>
                 </circle>
+                <!-- Solid red dot -->
                 <circle cx="63" cy="57" r="2.2" fill="#ef4444" opacity="1"/>
+                <!-- Leader line -->
                 <line x1="65.5" y1="55" x2="73" y2="46" stroke="#ef4444" stroke-width="0.35" opacity="0.85"/>
+                <!-- Label -->
                 <rect x="73" y="41" width="24" height="7.5" rx="1" fill="rgba(10,5,5,0.88)" stroke="#ef4444" stroke-width="0.35"/>
                 <text x="85" y="46" text-anchor="middle" font-family="Space Mono,monospace" font-size="2.6" fill="#ef4444" font-weight="bold">⚠ DUCT MISPLACED</text>
               </svg>
@@ -1047,6 +1056,7 @@ setInterval(updateClock,1000); updateClock();
       {n:'Drainage vs Foundation',loc:'Level B1 · Grid F2',desc:'DN150 drainage pipe conflicts with pad foundation FP-B1F. Pipe requires 300mm offset.',sev:'MEDIUM'},
       {n:'Stairwell vs Slab Opening',loc:'Level 04 · Grid E3',desc:'Stairwell ST-04 conflicts with slab opening OP-04E — 35mm positional offset from design.',sev:'MEDIUM'},
       {n:'Lift Shaft vs Utilities',loc:'Level 02–14 · Core A',desc:'Lift shaft LS-A intersects conduit run C02 on levels 3,7,11. 3 separate clashes.',sev:'MEDIUM'},
+      {n:'Duct Misplaced — MEP Conflict',loc:'Floor 02 · Grid C3 · Supply Duct / Structural Beam',desc:'Supply duct routed incorrectly — passes through structural beam zone. Identified by Robot R02 via site scan. Requires immediate reroute before MEP rough-in proceeds.',sev:'CRITICAL'},
     ];
     document.getElementById('clashTitle').textContent = data[idx].n;
     document.getElementById('clashSev').textContent = data[idx].sev;
