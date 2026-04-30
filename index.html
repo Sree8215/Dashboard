@@ -517,13 +517,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
               <img src="Clash.jpeg" alt="Clash View"
                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.95;z-index:0;">
               <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <!-- Outer pulsing red ring only -->
-                <circle cx="63" cy="57" r="6" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="0.7" opacity="0.9">
-                  <animate attributeName="r" values="6;9;6" dur="1.8s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.8s" repeatCount="indefinite"/>
+                <circle cx="63" cy="57" r="5" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="0.8">
+                  <animate attributeName="r" values="4;9;4" dur="2s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.9;0.1;0.9" dur="2s" repeatCount="indefinite"/>
                 </circle>
-                <!-- Solid red dot -->
-                <circle cx="63" cy="57" r="2.2" fill="#ef4444" opacity="1"/>
               </svg>
               <div class="bim-grid" style="position:absolute;inset:0;z-index:1;pointer-events:none"></div>
               <div style="position:absolute;top:8px;left:8px;width:14px;height:14px;border-top:2px solid rgba(245,158,11,.7);border-left:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
@@ -872,7 +869,11 @@ function nav(el) {
     'conditions':'SITE CONDITIONS'
   };
   document.getElementById('page-title').textContent = titles[page] || page.toUpperCase();
-  if(page === 'progress') setTimeout(buildGantt, 60);
+  // Re-render deferred content when switching pages
+  if(page === 'progress')   setTimeout(buildGantt, 60);
+  if(page === 'asbuilt')    setTimeout(buildAsBuiltCompare, 60);
+  if(page === 'conditions') setTimeout(()=>{ buildTrendChart(); drawGauge('gaugeNoise',74,100,'#10b981'); drawGauge('gaugeCO2',428,1000,'#22d3ee'); drawGauge('gaugeDust',68,100,'#ef4444'); }, 60);
+  if(page === 'vehicles')   setTimeout(buildDeliveryTimeline, 60);
 }
 
 // CLOCK
@@ -1132,9 +1133,9 @@ setInterval(updateClock,1000); updateClock();
 })();
 
 // BIM COMPARE CANVASES
-(function() {
+function buildAsBuiltCompare() {
   function drawBIM(canvas, mode) {
-    canvas.width = canvas.offsetWidth||500; canvas.height = canvas.offsetHeight||300;
+    canvas.width = canvas.offsetWidth||600; canvas.height = canvas.offsetHeight||300;
     const ctx = canvas.getContext('2d'), W=canvas.width, H=canvas.height;
     ctx.fillStyle='#090b0e'; ctx.fillRect(0,0,W,H);
     ctx.strokeStyle=mode==='scan'?'rgba(245,158,11,.15)':'rgba(34,211,238,.15)';
@@ -1186,7 +1187,8 @@ setInterval(updateClock,1000); updateClock();
   handle.addEventListener('touchstart',()=>dragging=true,{passive:true});
   document.addEventListener('touchmove',e=>{if(dragging)setPos(e.touches[0].clientX)},{passive:true});
   document.addEventListener('touchend',()=>dragging=false);
-})();
+}
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(buildAsBuiltCompare, 150); });
 
 // GANTT CHART
 function buildGantt() {
@@ -1219,7 +1221,7 @@ function buildGantt() {
 document.addEventListener('DOMContentLoaded', buildGantt);
 
 // DELIVERY TIMELINE
-document.addEventListener('DOMContentLoaded', function() {
+function buildDeliveryTimeline() {
   const now = new Date();
   const todayEl = document.getElementById('todayDate');
   if(todayEl) todayEl.textContent = now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
@@ -1235,7 +1237,9 @@ document.addEventListener('DOMContentLoaded', function() {
     {time:'15:30',name:'Safety Equipment Restk.',detail:'VH-412 · Site Office',status:'future'},
     {time:'17:00',name:'Waste Removal',detail:'VH-093 · Gate A Exit',status:'future'},
   ];
-  document.getElementById('deliveryTimeline').innerHTML = deliveries.map(d=>{
+  const el = document.getElementById('deliveryTimeline');
+  if(!el) return;
+  el.innerHTML = deliveries.map(d=>{
     const col=d.status==='done'?'var(--green)':d.status==='pending'?'var(--amber)':'var(--border2)';
     const label=d.status==='done'?'ARRIVED':d.status==='pending'?'EN ROUTE':'SCHEDULED';
     return `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
@@ -1244,7 +1248,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <div style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid ${col};color:${col};background:${col==='var(--green)'?'var(--green-dim)':col==='var(--amber)'?'var(--amber-dim)':'transparent'};white-space:nowrap">${label}</div>
     </div>`;
   }).join('');
-});
+}
+document.addEventListener('DOMContentLoaded', buildDeliveryTimeline);
 
 // GAUGES
 function drawGauge(canvasId, value, max, color) {
@@ -1277,8 +1282,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // TREND CHART
-(function() {
+function buildTrendChart() {
   const canvas = document.getElementById('trendChart');
+  if(!canvas) return;
   canvas.width = canvas.offsetWidth||400; canvas.height=120;
   const ctx = canvas.getContext('2d');
   const W=canvas.width, H=canvas.height;
@@ -1303,44 +1309,58 @@ document.addEventListener('DOMContentLoaded', function() {
       ctx.beginPath(); ctx.arc(x,y,2.5,0,Math.PI*2); ctx.fillStyle=color; ctx.fill();
     });
   }
-
-  // Grid
   ctx.strokeStyle='rgba(255,255,255,.05)'; ctx.lineWidth=.5;
   for(let i=0;i<4;i++){const y=10+i*(H-20)/3; ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
-
   drawLine(noise,100,'#10b981');
   drawLine(dust,100,'#ef4444');
   drawLine(co2,1000,'#22d3ee');
-
-  // X axis labels
   ctx.fillStyle='rgba(255,255,255,.25)'; ctx.font='8px Space Mono,monospace';
   hours.forEach((h,i)=>{
     const x=i*(W-40)/(hours.length-1)+20;
     ctx.fillText(h,x-8,H-1);
   });
-
-  // Legend
   [['Noise',4,'#10b981'],['PM2.5',60,'#ef4444'],['CO₂',116,'#22d3ee']].forEach(([l,lx,c])=>{
     ctx.fillStyle=c; ctx.fillRect(lx,2,12,3); ctx.fillStyle='rgba(255,255,255,.4)';
     ctx.fillText(l,lx+14,9);
   });
-})();
+}
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(buildTrendChart, 100);
+});
 
-// Live data fluctuation
-setInterval(()=>{
-  const n = 70+Math.random()*10;
-  const d = 62+Math.random()*12;
-  const c = 420+Math.random()*20;
-  document.getElementById('noiseVal').textContent=Math.round(n);
-  document.getElementById('dustVal').textContent=Math.round(d);
-  document.getElementById('carbonVal').textContent=Math.round(c);
-  drawGauge('gaugeNoise',n,100,'#10b981');
-  drawGauge('gaugeCO2',c,1000,'#22d3ee');
-  drawGauge('gaugeDust',d,100,'#ef4444');
-  document.getElementById('noiseBar').style.width=(n)+'%';
-  document.getElementById('dustBar').style.width=Math.min(100,d/50*100)+'%';
-  document.getElementById('co2Bar').style.width=(c/1000*100)+'%';
-},3000);
+// Live sensor animation — smooth sinusoidal drift
+(function() {
+  let tick = 0;
+
+  const sensors = [
+    { base:74,  amp:6,   speed:0.025, max:100,  color:'#10b981', gauge:'gaugeNoise', val:'noiseVal',  bar:'noiseBar', barMax:100  },
+    { base:430, amp:30,  speed:0.015, max:1000, color:'#22d3ee', gauge:'gaugeCO2',   val:'carbonVal', bar:'co2Bar',   barMax:1000 },
+    { base:67,  amp:7,   speed:0.03,  max:100,  color:'#ef4444', gauge:'gaugeDust',  val:'dustVal',   bar:'dustBar',  barMax:50   },
+  ];
+  const offsets = [0, 2.1, 4.4];
+
+  function animateSensors() {
+    tick++;
+    sensors.forEach((s, i) => {
+      const wave  = Math.sin(tick * s.speed + offsets[i]);
+      const noise = (Math.random() - 0.5) * s.amp * 0.25;
+      const value = Math.max(0, s.base + wave * s.amp + noise);
+
+      drawGauge(s.gauge, value, s.max, s.color);
+
+      if (tick % 12 === 0) {
+        const el = document.getElementById(s.val);
+        if (el) el.textContent = Math.round(value);
+      }
+      const bar = document.getElementById(s.bar);
+      if (bar) bar.style.width = Math.min(100, (value / s.barMax) * 100) + '%';
+    });
+    requestAnimationFrame(animateSensors);
+  }
+
+  // Start immediately — script is at bottom of body so DOM is ready
+  setTimeout(animateSensors, 100);
+})();
 </script>
 </body>
 </html>
