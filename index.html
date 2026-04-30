@@ -1430,6 +1430,8 @@ setInterval(()=>{
   document.getElementById('noiseBar').style.width=(n)+'%';
   document.getElementById('dustBar').style.width=Math.min(100,d/50*100)+'%';
   document.getElementById('co2Bar').style.width=(c/1000*100)+'%';
+},3000);
+
 // ==================== INSTALLATION STATUS ====================
 const components = [
   // [id, name, category, floor, scheduled, status: 'pending'|'arrived'|'installed'|'inspected', robot, date, note]
