@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SiteOS — Construction Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f11;
+  --surface:#13161a;
+  --panel:#181c21;
+  --card:#1e2329;
+  --border:#2a2f38;
+  --border2:#343c47;
+  --amber:#f59e0b;
+  --amber2:#fbbf24;
+  --amber-dim:#78400a;
+  --cyan:#22d3ee;
+  --cyan-dim:#0e5a6b;
+  --green:#10b981;
+  --green-dim:#064e33;
+  --red:#ef4444;
+  --red-dim:#5a1a1a;
+  --purple:#a78bfa;
+  --text:#e2e8f0;
+  --text2:#94a3b8;
+  --text3:#4b5563;
+  --mono:'Space Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+#sidebar{
+  width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:10;
+}
+.logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.logo-mark{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--amber);letter-spacing:-.5px}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.nav-section{padding:16px 0 4px;flex:1}
+.nav-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);padding:0 18px 8px;font-family:var(--mono)}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;
+  border-left:2px solid transparent;transition:all .15s;font-size:13px;font-weight:400;color:var(--text2);
+  position:relative;
+}
+.nav-item:hover{background:rgba(245,158,11,.05);color:var(--text)}
+.nav-item.active{background:rgba(245,158,11,.08);border-left-color:var(--amber);color:var(--amber)}
+.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:.7}
+.nav-item.active .nav-icon{opacity:1}
+.nav-badge{
+  margin-left:auto;font-family:var(--mono);font-size:9px;padding:2px 5px;
+  border-radius:3px;background:var(--red-dim);color:var(--red);
+}
+.nav-badge.ok{background:var(--green-dim);color:var(--green)}
+.status-bar{padding:14px 18px;border-top:1px solid var(--border)}
+.status-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);margin-bottom:6px}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dot.live{background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+.dot.warn{background:var(--amber)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* MAIN */
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.topbar{
+  height:50px;background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0;
+}
+.topbar-title{font-family:var(--mono);font-size:13px;color:var(--text);font-weight:700;letter-spacing:-.3px}
+.topbar-path{font-size:12px;color:var(--text3);font-family:var(--mono)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.chip{
+  font-size:10px;font-family:var(--mono);padding:3px 8px;border-radius:3px;
+  border:1px solid var(--border2);color:var(--text2);
+}
+.chip.live{border-color:var(--green);color:var(--green);background:var(--green-dim)}
+.ts{font-family:var(--mono);font-size:11px;color:var(--text3)}
+#content{flex:1;overflow:hidden;position:relative}
+.page{position:absolute;inset:0;overflow-y:auto;padding:20px 24px;display:none}
+.page.active{display:block}
+
+/* GRID UTILS */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.card-header{
+  padding:11px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2)}
+.card-body{padding:16px}
+.section-title{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:12px}
+
+/* STAT CARDS */
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px}
+.stat-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;font-family:var(--mono)}
+.stat-val{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--amber);line-height:1}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* FEED VIEWER */
+.feed-container{position:relative;background:#050709;border-radius:6px;overflow:hidden}
+.feed-overlay{position:absolute;inset:0;pointer-events:none}
+.scan-line{
+  position:absolute;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(34,211,238,.3),transparent);
+  animation:scan 3s linear infinite;top:0;
+}
+@keyframes scan{0%{top:0}100%{top:100%}}
+.corner{position:absolute;width:16px;height:16px;border-color:var(--amber);border-style:solid;opacity:.7}
+.corner.tl{top:8px;left:8px;border-width:2px 0 0 2px}
+.corner.tr{top:8px;right:8px;border-width:2px 2px 0 0}
+.corner.bl{bottom:8px;left:8px;border-width:0 0 2px 2px}
+.corner.br{bottom:8px;right:8px;border-width:0 2px 2px 0}
+.feed-label{
+  position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9px;
+  color:var(--cyan);background:rgba(0,0,0,.6);padding:2px 6px;border-radius:2px;
+}
+.feed-ts{
+  position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:9px;
+  color:var(--amber);background:rgba(0,0,0,.6);padding:2px 6px;border-radius:2px;
+}
+
+/* BIM VIEWER */
+.bim-canvas{position:relative;background:#0a0c10;border-radius:6px;overflow:hidden}
+.bim-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(34,211,238,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,211,238,.05) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+/* CLASH */
+.clash-item{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-radius:6px;margin-bottom:8px;background:var(--panel);border:1px solid var(--border);
+  cursor:pointer;transition:border-color .15s;
+}
+.clash-item:hover{border-color:var(--border2)}
+.clash-sev{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sev-high{background:var(--red)}
+.sev-med{background:var(--amber)}
+.sev-low{background:var(--green)}
+.clash-info{flex:1}
+.clash-name{font-size:13px;font-weight:500;color:var(--text)}
+.clash-loc{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px}
+.clash-tag{
+  font-size:9px;font-family:var(--mono);padding:2px 6px;border-radius:3px;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.tag-high{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.tag-med{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+.tag-low{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,185,129,.2)}
+
+/* GANTT */
+.gantt-row{display:flex;align-items:center;margin-bottom:6px;gap:0}
+.gantt-label{width:180px;min-width:180px;font-size:12px;color:var(--text2);padding-right:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gantt-track{flex:1;height:22px;background:var(--panel);border-radius:4px;position:relative;overflow:hidden}
+.gantt-bar{height:100%;position:absolute;border-radius:4px;top:0}
+.bar-plan{background:var(--border2);opacity:.6}
+.bar-actual{background:var(--amber);opacity:.85}
+.bar-late{background:var(--red);opacity:.85}
+.bar-done{background:var(--green);opacity:.85}
+.gantt-pct{font-family:var(--mono);font-size:9px;position:absolute;right:6px;top:50%;transform:translateY(-50%);color:#fff;opacity:.9}
+.gantt-header{display:flex;margin-bottom:4px;gap:0}
+.gantt-header-label{width:180px;min-width:180px}
+.gantt-months{flex:1;display:flex}
+.gantt-month{font-size:9px;color:var(--text3);font-family:var(--mono);text-align:left;flex:1;padding-left:2px}
+
+/* VEHICLE */
+.vehicle-row{
+  display:flex;align-items:center;gap:12px;padding:10px 14px;
+  border-radius:6px;margin-bottom:8px;background:var(--panel);border:1px solid var(--border);
+}
+.vehicle-icon{
+  width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.vehicle-info{flex:1}
+.vehicle-name{font-size:13px;font-weight:500;color:var(--text)}
+.vehicle-detail{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+.vehicle-status{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.vs-arrived{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,185,129,.2)}
+.vs-enroute{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+.vs-scheduled{background:rgba(30,35,41,1);color:var(--text3);border:1px solid var(--border)}
+
+/* GAUGE */
+.gauge-wrap{text-align:center}
+.gauge-svg{display:block;margin:0 auto}
+.gauge-val{font-family:var(--mono);font-size:20px;font-weight:700;margin-top:4px}
+.gauge-unit{font-size:11px;color:var(--text3);margin-top:2px}
+.env-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.env-row:last-child{border-bottom:none}
+.env-label{font-size:12px;color:var(--text2);width:120px}
+.env-bar-wrap{flex:1;height:8px;background:var(--panel);border-radius:4px;overflow:hidden}
+.env-bar{height:100%;border-radius:4px;transition:width .5s}
+.env-val{font-family:var(--mono);font-size:11px;color:var(--text);width:60px;text-align:right}
+.env-status{font-family:var(--mono);font-size:9px;padding:2px 5px;border-radius:2px;width:48px;text-align:center}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:1px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:16px}
+.tl-dot{
+  position:absolute;left:-24px;top:3px;width:12px;height:12px;border-radius:50%;
+  border:2px solid var(--border);background:var(--panel);
+}
+.tl-dot.done{border-color:var(--green);background:var(--green)}
+.tl-dot.active{border-color:var(--amber);background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.tl-dot.pending{border-color:var(--border2)}
+.tl-title{font-size:13px;font-weight:500;color:var(--text)}
+.tl-detail{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+
+/* PROGRESS BAR */
+.prog-wrap{margin-bottom:14px}
+.prog-top{display:flex;justify-content:space-between;margin-bottom:5px}
+.prog-name{font-size:12px;color:var(--text2)}
+.prog-pct{font-family:var(--mono);font-size:11px;color:var(--amber)}
+.prog-track{height:6px;background:var(--panel);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:var(--amber);transition:width .5s}
+.prog-fill.done{background:var(--green)}
+.prog-fill.late{background:var(--red)}
+
+/* SCAN COMPARISON */
+.compare-wrap{position:relative;border-radius:6px;overflow:hidden;cursor:col-resize;user-select:none}
+.compare-before,.compare-after{position:absolute;inset:0}
+.compare-after{clip-path:inset(0 50% 0 0)}
+.compare-divider{
+  position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--amber);
+  transform:translateX(-50%);z-index:5;
+}
+.compare-handle{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:28px;height:28px;background:var(--amber);border-radius:50%;z-index:6;
+  display:flex;align-items:center;justify-content:center;
+}
+.compare-label{
+  position:absolute;bottom:8px;font-family:var(--mono);font-size:9px;padding:2px 6px;
+  border-radius:2px;background:rgba(0,0,0,.7);z-index:7;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+
+/* ROBOT FEED SIMULATION */
+.robot-feed{width:100%;aspect-ratio:16/9;position:relative;background:#000;border-radius:6px;overflow:hidden}
+.robot-feed canvas{position:absolute;inset:0;width:100%;height:100%}
+
+/* SPLIT LAYOUT */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh - 130px)}
+.split-pane{overflow:hidden;display:flex;flex-direction:column;gap:0}
+
+/* TABS */
+.tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)}
+.tab{
+  padding:8px 16px;font-size:12px;font-family:var(--mono);cursor:pointer;
+  color:var(--text3);border-bottom:2px solid transparent;transition:all .15s;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.tab.active{color:var(--amber);border-bottom-color:var(--amber)}
+.tab:hover{color:var(--text)}
+
+/* ANNOTATION */
+.annot{
+  position:absolute;display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:9px;color:var(--red);
+  background:rgba(13,15,17,.85);border:1px solid rgba(239,68,68,.3);
+  padding:3px 7px;border-radius:3px;pointer-events:none;
+}
+.annot::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--red);
+  flex-shrink:0;animation:pulse 1.5s infinite;
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark">SITE//OS</div>
+    <div class="logo-sub">Construction Intelligence</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Modules</div>
+    <div class="nav-item active" data-page="site-checker" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Site Checker
+      <span class="nav-badge ok">LIVE</span>
+    </div>
+    <div class="nav-item" data-page="clash" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+      Clash Prediction
+      <span class="nav-badge">7</span>
+    </div>
+    <div class="nav-item" data-page="asbuilt" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3"/></svg>
+      As Built
+    </div>
+    <div class="nav-item" data-page="progress" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+      Progress Tracking
+    </div>
+    <div class="nav-item" data-page="vehicles" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+      Vehicle Schedules
+    </div>
+    <div class="nav-item" data-page="conditions" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
+      Site Conditions
+    </div>
+  </div>
+  <div class="status-bar">
+    <div class="status-item"><div class="dot live"></div>3 Robots Online</div>
+    <div class="status-item"><div class="dot warn"></div>Weather: Overcast 18°C</div>
+    <div class="status-item" style="color:var(--text3)">Updated 09:41 AM</div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">SITE CHECKER</div>
+    <div class="topbar-path" id="page-path" style="color:var(--text3);font-size:11px">PROJECT ALPHA — TOWER C, FLOORS 1–22</div>
+    <div class="topbar-right">
+      <div class="chip live">● LIVE</div>
+      <div class="chip">REVISION 14</div>
+      <div class="ts" id="clock">09:41:22</div>
+    </div>
+  </div>
+  <div id="content">
+
+    <!-- ==================== SITE CHECKER ==================== -->
+    <div class="page active" id="page-site-checker">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh - 160px)">
+
+        <!-- Robot Feed -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="flex:1;min-height:0">
+            <div class="card-header">
+              <span class="card-title">Robot Cam — Unit R03</span>
+              <div style="display:flex;gap:8px">
+                <span class="chip live">● REC</span>
+                <span class="chip">30 FPS</span>
+              </div>
+            </div>
+            <div class="card-body" style="padding:12px">
+              <div class="robot-feed" id="robotFeed" style="height:240px">
+                <canvas id="feedCanvas"></canvas>
+                <div class="feed-overlay">
+                  <div class="scan-line"></div>
+                  <div class="corner tl"></div><div class="corner tr"></div>
+                  <div class="corner bl"></div><div class="corner br"></div>
+                  <div class="feed-ts" id="feedTs">09:41:22.034</div>
+                  <div class="feed-label">R03 // LEVEL 08 — GRID C4</div>
+                  <div class="annot" style="top:28%;left:38%">REBAR GAP DETECTED</div>
+                  <div class="annot" style="bottom:30%;right:20%;color:var(--amber);border-color:rgba(245,158,11,.3)"><span style="background:var(--amber)"></span>FORMWORK CHECK</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alerts -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">Live Alerts</span><span class="chip">3 Active</span></div>
+            <div class="card-body" style="padding:10px 14px">
+              <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--red);margin-top:3px;flex-shrink:0;animation:pulse 1.5s infinite"></div>
+                <div><div style="font-size:12px;color:var(--text)">Rebar spacing deviation — Level 8, Grid C4</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">R03 · 09:39:14 · CRITICAL</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--amber);margin-top:3px;flex-shrink:0"></div>
+                <div><div style="font-size:12px;color:var(--text)">Formwork alignment ±8mm — Level 7, Grid B2</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">R01 · 09:35:52 · WARNING</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--amber);margin-top:3px;flex-shrink:0"></div>
+                <div><div style="font-size:12px;color:var(--text)">Concrete pour rate below spec — Level 8 East</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">R02 · 09:28:07 · WARNING</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Robot Status -->
+          <div class="grid3">
+            <div class="stat"><div class="stat-label">R01 Status</div><div class="stat-val" style="color:var(--green);font-size:14px">ACTIVE</div><div class="stat-sub">Level 07 — B2</div></div>
+            <div class="stat"><div class="stat-label">R02 Status</div><div class="stat-val" style="color:var(--green);font-size:14px">ACTIVE</div><div class="stat-sub">Level 08 — D1</div></div>
+            <div class="stat"><div class="stat-label">R03 Status</div><div class="stat-val" style="color:var(--amber);font-size:14px">ALERT</div><div class="stat-sub">Level 08 — C4</div></div>
+          </div>
+        </div>
+
+        <!-- BIM Panel -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="flex:1;min-height:0">
+            <div class="card-header">
+              <span class="card-title">BIM Model — Live View</span>
+              <div style="display:flex;gap:8px">
+                <span class="chip">IFC 2x3</span>
+                <span class="chip live">SYNCED</span>
+              </div>
+            </div>
+            <div class="card-body" style="padding:12px">
+              <div class="bim-canvas" style="height:300px;position:relative">
+                <div class="bim-grid"></div>
+                <canvas id="bimCanvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+                <div style="position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9px;color:var(--cyan);background:rgba(0,0,0,.6);padding:2px 6px;border-radius:2px">IFC MODEL · REV 14 · Δ SITE SCAN</div>
+                <div style="position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:9px;color:var(--amber);background:rgba(0,0,0,.6);padding:2px 6px;border-radius:2px">⚠ 3 DEVIATIONS FLAGGED</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deviation Table -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">Site vs BIM Deviations</span></div>
+            <div class="card-body" style="padding:0">
+              <table style="width:100%;font-size:12px;border-collapse:collapse">
+                <thead>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <th style="text-align:left;padding:8px 14px;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400">Element</th>
+                    <th style="text-align:left;padding:8px 14px;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400">Plan</th>
+                    <th style="text-align:left;padding:8px 14px;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400">Actual</th>
+                    <th style="text-align:left;padding:8px 14px;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400">Delta</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 14px;color:var(--text)">Column C4-L8</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">300mm</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">292mm</td><td style="padding:7px 14px;color:var(--red);font-family:var(--mono)">-8mm ⚠</td></tr>
+                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 14px;color:var(--text)">Slab L7-East</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">200mm</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">203mm</td><td style="padding:7px 14px;color:var(--green);font-family:var(--mono)">+3mm ✓</td></tr>
+                  <tr><td style="padding:7px 14px;color:var(--text)">Beam B2-L8</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">450mm</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">458mm</td><td style="padding:7px 14px;color:var(--amber);font-family:var(--mono)">+8mm !</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CLASH PREDICTION ==================== -->
+    <div class="page" id="page-clash">
+      <div style="display:grid;grid-template-columns:420px 1fr;gap:16px;height:calc(100vh - 160px)">
+        <div style="overflow-y:auto;padding-right:4px">
+          <div style="display:flex;gap:12px;margin-bottom:16px">
+            <div class="stat" style="flex:1"><div class="stat-label">Critical</div><div class="stat-val" style="color:var(--red)">3</div></div>
+            <div class="stat" style="flex:1"><div class="stat-label">Medium</div><div class="stat-val">4</div></div>
+            <div class="stat" style="flex:1"><div class="stat-label">Resolved</div><div class="stat-val" style="color:var(--green)">12</div></div>
+          </div>
+          <div class="section-title">Active Clashes</div>
+          <div class="clash-item" onclick="selectClash(this,0)">
+            <div class="clash-sev sev-high"></div>
+            <div class="clash-info"><div class="clash-name">MEP vs Structural Beam</div><div class="clash-loc">Level 09 · Grid D3–D4 · Ductwork / Beam B-09</div></div>
+            <span class="clash-tag tag-high">CRITICAL</span>
+          </div>
+          <div class="clash-item" onclick="selectClash(this,1)">
+            <div class="clash-sev sev-high"></div>
+            <div class="clash-info"><div class="clash-name">Pipe vs Rebar Cage</div><div class="clash-loc">Level 08 · Grid C2 · Plumbing / Rebar RC-08C</div></div>
+            <span class="clash-tag tag-high">CRITICAL</span>
+          </div>
+          <div class="clash-item" onclick="selectClash(this,2)">
+            <div class="clash-sev sev-high"></div>
+            <div class="clash-info"><div class="clash-name">Fire Suppression vs Column</div><div class="clash-loc">Level 11 · Grid B5 · Sprinkler Main / Col C-11B</div></div>
+            <span class="clash-tag tag-high">CRITICAL</span>
+          </div>
+          <div class="clash-item" onclick="selectClash(this,3)">
+            <div class="clash-sev sev-med"></div>
+            <div class="clash-info"><div class="clash-name">Cable Tray vs HVAC Duct</div><div class="clash-loc">Level 06 · Grid A1 · E&I Tray / Supply Duct S06</div></div>
+            <span class="clash-tag tag-med">MEDIUM</span>
+          </div>
+          <div class="clash-item" onclick="selectClash(this,4)">
+            <div class="clash-sev sev-med"></div>
+            <div class="clash-info"><div class="clash-name">Drainage Pipe vs Foundation</div><div class="clash-loc">Level B1 · Grid F2 · Drain-12 / Pad FP-B1F</div></div>
+            <span class="clash-tag tag-med">MEDIUM</span>
+          </div>
+          <div class="clash-item" onclick="selectClash(this,5)">
+            <div class="clash-sev sev-med"></div>
+            <div class="clash-info"><div class="clash-name">Stairwell vs Slab Opening</div><div class="clash-loc">Level 04 · Grid E3 · Stair-ST04 / Opening OP-04E</div></div>
+            <span class="clash-tag tag-med">MEDIUM</span>
+          </div>
+          <div class="clash-item" onclick="selectClash(this,6)">
+            <div class="clash-sev sev-med"></div>
+            <div class="clash-info"><div class="clash-name">Lift Shaft vs Utilities</div><div class="clash-loc">Level 02–14 · Core A · Shaft LS-A / Conduit C02</div></div>
+            <span class="clash-tag tag-med">MEDIUM</span>
+          </div>
+        </div>
+        <!-- BIM Clash View -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title" id="clashTitle">Select Clash to View in Model</span>
+            <span class="chip" id="clashSev">—</span>
+          </div>
+          <div class="card-body" style="padding:12px;height:calc(100% - 42px)">
+            <div class="bim-canvas" style="height:100%;position:relative">
+              <div class="bim-grid"></div>
+              <canvas id="clashCanvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+              <div id="clashInfo" style="position:absolute;bottom:12px;left:12px;right:12px;background:rgba(13,15,17,.9);border:1px solid var(--border);border-radius:6px;padding:12px;display:none">
+                <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px">CLASH DETAIL</div>
+                <div id="clashDetailText" style="font-size:13px;color:var(--text)"></div>
+                <div id="clashDetailSub" style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== AS BUILT ==================== -->
+    <div class="page" id="page-asbuilt">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh - 160px)">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px">
+            <div class="stat" style="flex:1"><div class="stat-label">Scan Coverage</div><div class="stat-val">87%</div><div class="stat-sub">Floors 1–19 complete</div></div>
+            <div class="stat" style="flex:1"><div class="stat-label">Conformance</div><div class="stat-val" style="color:var(--green)">94.2%</div><div class="stat-sub">±5mm tolerance</div></div>
+            <div class="stat" style="flex:1"><div class="stat-label">Deviations</div><div class="stat-val" style="color:var(--red)">11</div><div class="stat-sub">3 critical</div></div>
+          </div>
+          <div class="card" style="flex:1">
+            <div class="card-header"><span class="card-title">BIM vs Point Cloud — Level 08</span><span class="chip">DRAG TO COMPARE</span></div>
+            <div class="card-body" style="padding:12px">
+              <div class="compare-wrap" id="compareWrap" style="height:300px">
+                <div class="compare-before" style="background:#0a0c10;display:flex;align-items:center;justify-content:center">
+                  <canvas id="bimCompCanvas" style="width:100%;height:100%;position:absolute;inset:0"></canvas>
+                </div>
+                <div class="compare-after" id="compareAfter" style="background:#0a0c10;display:flex;align-items:center;justify-content:center">
+                  <canvas id="scanCompCanvas" style="width:100%;height:100%;position:absolute;inset:0"></canvas>
+                </div>
+                <div class="compare-divider" id="compareDivider"></div>
+                <div class="compare-handle" id="compareHandle">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0d0f11" stroke-width="3"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>
+                </div>
+                <div class="compare-label" style="left:10px;color:var(--cyan)">BIM MODEL</div>
+                <div class="compare-label" style="right:10px;color:var(--amber)">SITE SCAN</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Floor Coverage Status</span></div>
+            <div class="card-body" style="padding:12px">
+              <div style="display:flex;gap:4px;flex-wrap:wrap">
+                <!-- Floor chips -->
+                <script>
+                  const floorStates=[...Array(22)].map((_,i)=>{const f=i+1;if(f<=16)return 'done';if(f<=19)return 'partial';return 'pending'});
+                  document.write(floorStates.map((s,i)=>{
+                    const col=s==='done'?'var(--green)':s==='partial'?'var(--amber)':'var(--text3)';
+                    const bg=s==='done'?'var(--green-dim)':s==='partial'?'var(--amber-dim)':'var(--panel)';
+                    return `<div style="width:38px;height:28px;border-radius:4px;background:${bg};border:1px solid ${col};display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:${col}">L${i+1}</div>`;
+                  }).join(''));
+                </script>
+              </div>
+              <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--text3)">
+                <span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:2px;background:var(--green);display:inline-block"></span>Scanned</span>
+                <span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:2px;background:var(--amber);display:inline-block"></span>In Progress</span>
+                <span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:2px;background:var(--text3);display:inline-block"></span>Pending</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deviations list -->
+        <div class="card" style="overflow:hidden;display:flex;flex-direction:column">
+          <div class="card-header"><span class="card-title">As-Built Deviations Log</span><span class="chip">11 Items</span></div>
+          <div style="overflow-y:auto;flex:1;padding:12px">
+            <div class="timeline">
+              <div class="tl-item"><div class="tl-dot" style="border-color:var(--red);background:var(--red)"></div><div class="tl-title">Column C4-L08: -8mm clearance deviation</div><div class="tl-detail">Scan 2024-05-12 · R03 · Requires remediation</div></div>
+              <div class="tl-item"><div class="tl-dot" style="border-color:var(--red);background:var(--red)"></div><div class="tl-title">Wall W12-L06: Vertical plumb ±12mm</div><div class="tl-detail">Scan 2024-05-11 · R01 · Under review</div></div>
+              <div class="tl-item"><div class="tl-dot" style="border-color:var(--red);background:var(--red)"></div><div class="tl-title">Opening OP-04E: 35mm position offset</div><div class="tl-detail">Scan 2024-05-10 · R02 · Clash flagged</div></div>
+              <div class="tl-item"><div class="tl-dot" style="border-color:var(--amber);background:var(--amber)"></div><div class="tl-title">Beam B2-L08: +8mm depth variance</div><div class="tl-detail">Scan 2024-05-12 · R03 · Within tolerance</div></div>
+              <div class="tl-item"><div class="tl-dot" style="border-color:var(--amber);background:var(--amber)"></div><div class="tl-title">Stair ST-L04: 6mm tread depth variance</div><div class="tl-detail">Scan 2024-05-09 · R01 · Monitoring</div></div>
+              <div class="tl-item"><div class="tl-dot" style="border-color:var(--amber);background:var(--amber)"></div><div class="tl-title">Slab L07-East: +3mm thickness</div><div class="tl-detail">Scan 2024-05-08 · R02 · Acceptable</div></div>
+              <div class="tl-item"><div class="tl-dot" style="border-color:var(--green);background:var(--green)"></div><div class="tl-title">Foundation L-B1: Conforms ±2mm</div><div class="tl-detail">Scan 2024-04-28 · R01 · Closed</div></div>
+              <div class="tl-item"><div class="tl-dot" style="border-color:var(--green);background:var(--green)"></div><div class="tl-title">Core Wall CW-01: Conforms ±1mm</div><div class="tl-detail">Scan 2024-04-22 · R02 · Closed</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PROGRESS TRACKING ==================== -->
+    <div class="page" id="page-progress">
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;height:calc(100vh - 160px)">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="grid4">
+            <div class="stat"><div class="stat-label">Overall</div><div class="stat-val">68%</div><div class="stat-sub">On schedule</div></div>
+            <div class="stat"><div class="stat-label">Days Ahead</div><div class="stat-val" style="color:var(--red)">-3</div><div class="stat-sub">vs baseline</div></div>
+            <div class="stat"><div class="stat-label">Tasks Done</div><div class="stat-val" style="color:var(--green)">142</div><div class="stat-sub">of 210 total</div></div>
+            <div class="stat"><div class="stat-label">Critical Path</div><div class="stat-val" style="color:var(--amber)">4</div><div class="stat-sub">items at risk</div></div>
+          </div>
+          <!-- GANTT -->
+          <div class="card" style="flex:1;overflow:hidden">
+            <div class="card-header"><span class="card-title">Schedule vs Actual — Gantt View</span><div style="display:flex;gap:8px;align-items:center"><div style="width:10px;height:10px;border-radius:2px;background:var(--border2);opacity:.6"></div><span style="font-size:10px;color:var(--text3)">Planned</span><div style="width:10px;height:10px;border-radius:2px;background:var(--amber)"></div><span style="font-size:10px;color:var(--text3)">Actual</span></div></div>
+            <div class="card-body" style="overflow-y:auto;height:calc(100% - 42px)">
+              <div class="gantt-header">
+                <div class="gantt-header-label"></div>
+                <div class="gantt-months">
+                  <div class="gantt-month">JAN</div><div class="gantt-month">FEB</div>
+                  <div class="gantt-month">MAR</div><div class="gantt-month">APR</div>
+                  <div class="gantt-month">MAY</div><div class="gantt-month">JUN</div>
+                  <div class="gantt-month">JUL</div><div class="gantt-month">AUG</div>
+                </div>
+              </div>
+              <!-- Gantt rows: [label, planStart%, planWidth%, actualStart%, actualWidth%, status] -->
+              <div id="ganttContainer"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Tasks Breakdown -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Work Packages</span></div>
+            <div class="card-body">
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">Substructure</span><span class="prog-pct">100%</span></div><div class="prog-track"><div class="prog-fill done" style="width:100%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">RC Frame — L1–L8</span><span class="prog-pct">100%</span></div><div class="prog-track"><div class="prog-fill done" style="width:100%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">RC Frame — L9–L16</span><span class="prog-pct">72%</span></div><div class="prog-track"><div class="prog-fill" style="width:72%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">RC Frame — L17–L22</span><span class="prog-pct">18%</span></div><div class="prog-track"><div class="prog-fill" style="width:18%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">MEP Rough-In</span><span class="prog-pct" style="color:var(--red)">43%</span></div><div class="prog-track"><div class="prog-fill late" style="width:43%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">Façade Cladding</span><span class="prog-pct">31%</span></div><div class="prog-track"><div class="prog-fill" style="width:31%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">Internal Fit-Out</span><span class="prog-pct">8%</span></div><div class="prog-track"><div class="prog-fill" style="width:8%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">Testing & Commissioning</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Critical Path Risks</span></div>
+            <div class="card-body" style="padding:10px 14px">
+              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--red);font-family:var(--mono)">01</span><div><div>MEP Rough-In — 4 days behind</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Impacts L9–L16 handover</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">02</span><div><div>Façade Cladding material delayed</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Supplier delay: 2 weeks</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">03</span><div><div>L17–L22 formwork allocation</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Crew availability constraint</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">04</span><div><div>Crane access conflict — July 3–7</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Overlapping tower crane work</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== VEHICLE SCHEDULES ==================== -->
+    <div class="page" id="page-vehicles">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh - 160px)">
+        <div style="display:flex;flex-direction:column;gap:14px;overflow-y:auto">
+          <div class="grid3">
+            <div class="stat"><div class="stat-label">On Site</div><div class="stat-val" style="color:var(--green)">6</div></div>
+            <div class="stat"><div class="stat-label">En Route</div><div class="stat-val" style="color:var(--amber)">4</div></div>
+            <div class="stat"><div class="stat-label">Today Total</div><div class="stat-val">14</div></div>
+          </div>
+          <div class="section-title">Arrived Today</div>
+          <div class="vehicle-row">
+            <div class="vehicle-icon" style="background:#0d3321">🚛</div>
+            <div class="vehicle-info"><div class="vehicle-name">Ready-Mix Concrete — Batch 03</div><div class="vehicle-detail">VH-441 · 8m³ · Level 08 Pour · Arrived 07:14</div></div>
+            <span class="vehicle-status vs-arrived">ON SITE</span>
+          </div>
+          <div class="vehicle-row">
+            <div class="vehicle-icon" style="background:#0d3321">🏗️</div>
+            <div class="vehicle-info"><div class="vehicle-name">Rebar Delivery — Bundle RC-08</div><div class="vehicle-detail">VH-229 · 12T · Grid C2–C6 · Arrived 07:52</div></div>
+            <span class="vehicle-status vs-arrived">ON SITE</span>
+          </div>
+          <div class="vehicle-row">
+            <div class="vehicle-icon" style="background:#0d3321">🚚</div>
+            <div class="vehicle-info"><div class="vehicle-name">Formwork Panels — Set F14</div><div class="vehicle-detail">VH-318 · 6.5T · Level 09 staging · Arrived 08:30</div></div>
+            <span class="vehicle-status vs-arrived">ON SITE</span>
+          </div>
+          <div class="vehicle-row">
+            <div class="vehicle-icon" style="background:#0d3321">🚜</div>
+            <div class="vehicle-info"><div class="vehicle-name">Excavator Attachment Swap</div><div class="vehicle-detail">VH-105 · EX-D7 bucket · Equipment yard · Arrived 09:05</div></div>
+            <span class="vehicle-status vs-arrived">ON SITE</span>
+          </div>
+          <div class="section-title" style="margin-top:4px">En Route</div>
+          <div class="vehicle-row">
+            <div class="vehicle-icon" style="background:#2d2005">🚛</div>
+            <div class="vehicle-info"><div class="vehicle-name">Ready-Mix Concrete — Batch 04</div><div class="vehicle-detail">VH-442 · 8m³ · ETA: 10:15 · 12 km away</div></div>
+            <span class="vehicle-status vs-enroute">EN ROUTE</span>
+          </div>
+          <div class="vehicle-row">
+            <div class="vehicle-icon" style="background:#2d2005">🪟</div>
+            <div class="vehicle-info"><div class="vehicle-name">Curtain Wall Panels — CW-22A</div><div class="vehicle-detail">VH-507 · 18T · ETA: 11:00 · Oversized load</div></div>
+            <span class="vehicle-status vs-enroute">EN ROUTE</span>
+          </div>
+          <div class="vehicle-row">
+            <div class="vehicle-icon" style="background:#2d2005">🔧</div>
+            <div class="vehicle-info"><div class="vehicle-name">MEP Materials — Box 14–17</div><div class="vehicle-detail">VH-334 · 2.4T · ETA: 12:30 · Depot cleared</div></div>
+            <span class="vehicle-status vs-enroute">EN ROUTE</span>
+          </div>
+        </div>
+        <!-- Schedule Timeline -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card" style="flex:1;overflow:hidden">
+            <div class="card-header"><span class="card-title">Today's Delivery Schedule</span><span class="ts" id="todayDate">—</span></div>
+            <div class="card-body" style="overflow-y:auto;height:calc(100% - 42px)">
+              <div id="deliveryTimeline"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Access Gate Log</span></div>
+            <div class="card-body" style="padding:0">
+              <table style="width:100%;font-size:11px;border-collapse:collapse;font-family:var(--mono)">
+                <thead><tr style="border-bottom:1px solid var(--border)">
+                  <th style="text-align:left;padding:6px 14px;color:var(--text3);font-weight:400">TIME</th>
+                  <th style="text-align:left;padding:6px 14px;color:var(--text3);font-weight:400">VEHICLE</th>
+                  <th style="text-align:left;padding:6px 14px;color:var(--text3);font-weight:400">CARGO</th>
+                  <th style="text-align:left;padding:6px 14px;color:var(--text3);font-weight:400">STATUS</th>
+                </tr></thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:6px 14px;color:var(--text2)">06:50</td><td style="padding:6px 14px">VH-318</td><td style="padding:6px 14px;color:var(--text3)">Formwork</td><td style="padding:6px 14px;color:var(--green)">IN ✓</td></tr>
+                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:6px 14px;color:var(--text2)">07:08</td><td style="padding:6px 14px">VH-441</td><td style="padding:6px 14px;color:var(--text3)">Concrete</td><td style="padding:6px 14px;color:var(--green)">IN ✓</td></tr>
+                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:6px 14px;color:var(--text2)">07:45</td><td style="padding:6px 14px">VH-229</td><td style="padding:6px 14px;color:var(--text3)">Rebar</td><td style="padding:6px 14px;color:var(--green)">IN ✓</td></tr>
+                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:6px 14px;color:var(--text2)">08:22</td><td style="padding:6px 14px">VH-105</td><td style="padding:6px 14px;color:var(--text3)">Equipment</td><td style="padding:6px 14px;color:var(--green)">IN ✓</td></tr>
+                  <tr><td style="padding:6px 14px;color:var(--text2)">08:55</td><td style="padding:6px 14px">VH-093</td><td style="padding:6px 14px;color:var(--text3)">Waste</td><td style="padding:6px 14px;color:var(--amber)">OUT ↑</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SITE CONDITIONS ==================== -->
+    <div class="page" id="page-conditions">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Noise Level</span><span class="chip" id="noiseChip">MONITORING</span></div>
+          <div class="card-body" style="text-align:center">
+            <div class="gauge-wrap"><canvas id="gaugeNoise" width="140" height="90" class="gauge-svg"></canvas><div class="gauge-val" id="noiseVal">74</div><div class="gauge-unit">dB(A) — Limit: 85 dB</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Carbon Emissions</span><span class="chip" id="carbonChip">MONITORING</span></div>
+          <div class="card-body" style="text-align:center">
+            <div class="gauge-wrap"><canvas id="gaugeCO2" width="140" height="90" class="gauge-svg"></canvas><div class="gauge-val" id="carbonVal">428</div><div class="gauge-unit">ppm CO₂ — Threshold: 1000</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Dust / PM2.5</span><span class="chip" id="dustChip" style="border-color:var(--red);color:var(--red)">ELEVATED</span></div>
+          <div class="card-body" style="text-align:center">
+            <div class="gauge-wrap"><canvas id="gaugeDust" width="140" height="90" class="gauge-svg"></canvas><div class="gauge-val" id="dustVal" style="color:var(--red)">68</div><div class="gauge-unit">μg/m³ PM2.5 — Limit: 50</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Environmental Sensors — All Zones</span></div>
+          <div class="card-body">
+            <div class="env-row">
+              <div class="env-label">Noise (dB)</div>
+              <div class="env-bar-wrap"><div class="env-bar" id="noiseBar" style="width:87%;background:var(--green)"></div></div>
+              <div class="env-val">74 dB</div>
+              <div class="env-status" style="background:var(--green-dim);color:var(--green);border-radius:3px;font-size:9px;font-family:var(--mono);padding:2px 4px">OK</div>
+            </div>
+            <div class="env-row">
+              <div class="env-label">CO₂ (ppm)</div>
+              <div class="env-bar-wrap"><div class="env-bar" id="co2Bar" style="width:43%;background:var(--green)"></div></div>
+              <div class="env-val">428</div>
+              <div class="env-status" style="background:var(--green-dim);color:var(--green);border-radius:3px;font-size:9px;font-family:var(--mono);padding:2px 4px">OK</div>
+            </div>
+            <div class="env-row">
+              <div class="env-label">PM2.5 (μg/m³)</div>
+              <div class="env-bar-wrap"><div class="env-bar" id="dustBar" style="width:100%;background:var(--red)"></div></div>
+              <div class="env-val" style="color:var(--red)">68</div>
+              <div class="env-status" style="background:var(--red-dim);color:var(--red);border-radius:3px;font-size:9px;font-family:var(--mono);padding:2px 4px">HIGH</div>
+            </div>
+            <div class="env-row">
+              <div class="env-label">Temperature</div>
+              <div class="env-bar-wrap"><div class="env-bar" style="width:55%;background:var(--amber)"></div></div>
+              <div class="env-val">18°C</div>
+              <div class="env-status" style="background:var(--green-dim);color:var(--green);border-radius:3px;font-size:9px;font-family:var(--mono);padding:2px 4px">OK</div>
+            </div>
+            <div class="env-row">
+              <div class="env-label">Wind Speed</div>
+              <div class="env-bar-wrap"><div class="env-bar" style="width:30%;background:var(--cyan)"></div></div>
+              <div class="env-val">12 km/h</div>
+              <div class="env-status" style="background:var(--green-dim);color:var(--green);border-radius:3px;font-size:9px;font-family:var(--mono);padding:2px 4px">OK</div>
+            </div>
+            <div class="env-row">
+              <div class="env-label">Humidity</div>
+              <div class="env-bar-wrap"><div class="env-bar" style="width:74%;background:var(--cyan-dim);border:1px solid var(--cyan)"></div></div>
+              <div class="env-val">74%</div>
+              <div class="env-status" style="background:var(--amber-dim);color:var(--amber);border-radius:3px;font-size:9px;font-family:var(--mono);padding:2px 4px">WATCH</div>
+            </div>
+            <div class="env-row">
+              <div class="env-label">VOC Index</div>
+              <div class="env-bar-wrap"><div class="env-bar" style="width:20%;background:var(--green)"></div></div>
+              <div class="env-val">102 ppb</div>
+              <div class="env-status" style="background:var(--green-dim);color:var(--green);border-radius:3px;font-size:9px;font-family:var(--mono);padding:2px 4px">OK</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Condition Trend — Last 6h</span></div>
+            <div class="card-body" style="padding:10px"><canvas id="trendChart" height="120"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Active Alerts</span></div>
+            <div class="card-body" style="padding:10px 14px">
+              <div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);align-items:flex-start">
+                <div style="width:6px;height:6px;border-radius:50%;background:var(--red);margin-top:4px;animation:pulse 1.5s infinite;flex-shrink:0"></div>
+                <div style="font-size:12px;color:var(--text)">PM2.5 elevated at Zone C-East — 68 μg/m³ (limit 50). Dust suppression deployed.</div>
+              </div>
+              <div style="display:flex;gap:8px;padding:7px 0;align-items:flex-start">
+                <div style="width:6px;height:6px;border-radius:50%;background:var(--amber);margin-top:4px;flex-shrink:0"></div>
+                <div style="font-size:12px;color:var(--text)">Humidity at 74% — monitor concrete curing schedule on Level 8.</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Sensor Nodes</span></div>
+            <div class="card-body" style="padding:10px 14px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;font-family:var(--mono)">
+                <div style="display:flex;align-items:center;gap:6px"><div class="dot live"></div><span>SN-01 · Level 1</span></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="dot live"></div><span>SN-02 · Level 4</span></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="dot live"></div><span>SN-03 · Level 8</span></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="dot" style="background:var(--red)"></div><span style="color:var(--red)">SN-04 · Level 8E ⚠</span></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="dot live"></div><span>SN-05 · Perimeter</span></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="dot live"></div><span>SN-06 · Gate A</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- #content -->
+</div><!-- #main -->
+
+<script>
+// NAV
+function nav(el) {
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  const page = el.dataset.page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const titles = {
+    'site-checker':'SITE CHECKER',
+    'clash':'CLASH PREDICTION',
+    'asbuilt':'AS BUILT UPDATE',
+    'progress':'PROGRESS TRACKING',
+    'vehicles':'VEHICLE SCHEDULES',
+    'conditions':'SITE CONDITIONS'
+  };
+  document.getElementById('page-title').textContent = titles[page] || page.toUpperCase();
+}
+
+// CLOCK
+function updateClock() {
+  const now = new Date();
+  const t = now.toTimeString().split(' ')[0];
+  document.getElementById('clock').textContent = t;
+  document.getElementById('feedTs').textContent = t + '.' + String(now.getMilliseconds()).padStart(3,'0');
+}
+setInterval(updateClock,1000); updateClock();
+
+// ROBOT FEED CANVAS
+(function() {
+  const canvas = document.getElementById('feedCanvas');
+  const feed = document.getElementById('robotFeed');
+  const resizeObs = new ResizeObserver(()=>{
+    canvas.width = feed.offsetWidth;
+    canvas.height = feed.offsetHeight;
+  });
+  resizeObs.observe(feed);
+  setTimeout(()=>{canvas.width=feed.offsetWidth;canvas.height=feed.offsetHeight;},100);
+
+  const ctx = canvas.getContext('2d');
+  let t = 0;
+  const pts = [];
+  for(let i=0;i<200;i++) pts.push({x:Math.random(),y:Math.random(),s:Math.random()*.5+.5,b:Math.random()});
+
+  function draw() {
+    const w=canvas.width, h=canvas.height;
+    if(!w||!h){requestAnimationFrame(draw);return}
+    ctx.fillStyle='#060810'; ctx.fillRect(0,0,w,h);
+
+    // Grid
+    ctx.strokeStyle='rgba(34,211,238,0.06)';ctx.lineWidth=.5;
+    for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+    for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+
+    // Structural sketch
+    ctx.strokeStyle='rgba(100,140,200,0.35)'; ctx.lineWidth=1;
+    const bx=w*.15, by=h*.1, bw=w*.7, bh=h*.8;
+    ctx.strokeRect(bx,by,bw,bh);
+    for(let i=1;i<4;i++){
+      ctx.beginPath();ctx.moveTo(bx+bw*i/4,by);ctx.lineTo(bx+bw*i/4,by+bh);ctx.stroke();
+    }
+    for(let i=1;i<5;i++){
+      ctx.beginPath();ctx.moveTo(bx,by+bh*i/5);ctx.lineTo(bx+bw,by+bh*i/5);ctx.stroke();
+    }
+
+    // Deviation highlight
+    ctx.strokeStyle='rgba(239,68,68,0.7)'; ctx.lineWidth=1.5;
+    ctx.strokeRect(bx+bw*.48, by+bh*.35, bw*.18, bh*.15);
+    ctx.strokeStyle='rgba(245,158,11,.5)'; ctx.lineWidth=1;
+    ctx.setLineDash([4,3]);
+    ctx.strokeRect(bx+bw*.1, by+bh*.55, bw*.22, bh*.2);
+    ctx.setLineDash([]);
+
+    // Points
+    pts.forEach(p=>{
+      const phase = p.b * Math.PI*2 + t*.02;
+      const a = (.4+Math.sin(phase)*.3)*p.s;
+      const size = p.s*1.2;
+      ctx.fillStyle=`rgba(34,211,238,${a*0.6})`;
+      ctx.fillRect(p.x*w-size/2, p.y*h-size/2, size, size);
+    });
+
+    // Crosshair
+    const cx=w*.53+Math.sin(t*.03)*w*.04, cy=h*.42+Math.cos(t*.025)*h*.03;
+    ctx.strokeStyle='rgba(245,158,11,.8)'; ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(cx-12,cy);ctx.lineTo(cx+12,cy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,cy-12);ctx.lineTo(cx,cy+12);ctx.stroke();
+    ctx.strokeStyle='rgba(245,158,11,.4)'; ctx.lineWidth=.5;
+    ctx.beginPath();ctx.arc(cx,cy,20,0,Math.PI*2);ctx.stroke();
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// BIM CANVAS
+(function() {
+  const canvas = document.getElementById('bimCanvas');
+  const parent = canvas.parentElement;
+  canvas.width = parent.offsetWidth || 400;
+  canvas.height = parent.offsetHeight || 300;
+  const ctx = canvas.getContext('2d');
+  let t = 0;
+
+  function drawIso(ctx, x, y, w, h, d, col, top, side, front) {
+    const s = d * Math.cos(Math.PI/6);
+    const pts = {
+      a:[x,y], b:[x+w,y], c:[x+w+s,y-d*.5], d:[x+s,y-d*.5],
+      e:[x,y-h], f:[x+w,y-h], g:[x+w+s,y-h-d*.5], h:[x+s,y-h-d*.5]
+    };
+    ctx.beginPath();
+    ctx.moveTo(pts.a[0],pts.a[1]);ctx.lineTo(pts.b[0],pts.b[1]);
+    ctx.lineTo(pts.f[0],pts.f[1]);ctx.lineTo(pts.e[0],pts.e[1]);ctx.closePath();
+    ctx.fillStyle=front||col; ctx.fill();
+    ctx.strokeStyle='rgba(34,211,238,.3)';ctx.lineWidth=.5;ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(pts.b[0],pts.b[1]);ctx.lineTo(pts.c[0],pts.c[1]);
+    ctx.lineTo(pts.g[0],pts.g[1]);ctx.lineTo(pts.f[0],pts.f[1]);ctx.closePath();
+    ctx.fillStyle=side||'rgba(30,40,60,.8)'; ctx.fill(); ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(pts.e[0],pts.e[1]);ctx.lineTo(pts.f[0],pts.f[1]);
+    ctx.lineTo(pts.g[0],pts.g[1]);ctx.lineTo(pts.h[0],pts.h[1]);ctx.closePath();
+    ctx.fillStyle=top||'rgba(40,55,80,.9)'; ctx.fill(); ctx.stroke();
+  }
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#090b0e'; ctx.fillRect(0,0,W,H);
+
+    // Grid
+    ctx.strokeStyle='rgba(34,211,238,.04)';ctx.lineWidth=.5;
+    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+    const ox=W*.18, oy=H*.78;
+    // Draw floors
+    for(let f=0;f<8;f++) {
+      const fy = oy - f*28;
+      const isActive = f===7;
+      const col = isActive?'rgba(245,158,11,.15)':'rgba(20,40,80,.6)';
+      const tc = isActive?'rgba(245,158,11,.25)':'rgba(30,55,110,.5)';
+      drawIso(ctx, ox+20, fy, 180, 24, 80, col, tc, undefined, undefined);
+    }
+
+    // Columns
+    [[ox+24,oy-8*28+24],[ox+200,oy-8*28+24],[ox+24,oy-4*28+24],[ox+200,oy-4*28+24]].forEach(([cx,cy])=>{
+      drawIso(ctx,cx,oy-1,8,cy-(oy-1),4,'rgba(100,140,200,.3)','rgba(120,170,240,.2)',undefined,undefined);
+    });
+
+    // Deviation highlights
+    const pulse = .5+Math.sin(t*.06)*.5;
+    ctx.strokeStyle=`rgba(239,68,68,${.4+pulse*.4})`; ctx.lineWidth=1.5;
+    ctx.strokeRect(ox+80,oy-8*28-8,60,40);
+    ctx.fillStyle=`rgba(239,68,68,${.05+pulse*.08})`; ctx.fillRect(ox+80,oy-8*28-8,60,40);
+
+    ctx.strokeStyle=`rgba(245,158,11,${.3+pulse*.3})`; ctx.lineWidth=1;
+    ctx.setLineDash([3,3]); ctx.strokeRect(ox+160,oy-6*28-5,50,30); ctx.setLineDash([]);
+
+    // Level labels
+    ctx.fillStyle='rgba(34,211,238,.5)'; ctx.font='8px Space Mono, monospace';
+    for(let f=0;f<8;f++){
+      ctx.fillText('L'+(f+1).toString().padStart(2,'0'), ox+2, oy-f*28-8);
+    }
+
+    t++; requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// CLASH CANVAS
+(function() {
+  const canvas = document.getElementById('clashCanvas');
+  const ctx = canvas.getContext('2d');
+  let t = 0;
+  let selClash = -1;
+
+  window.selectClash = function(el, idx) {
+    selClash = idx;
+    const data = [
+      {n:'MEP vs Structural Beam',loc:'Level 09 · Grid D3–D4',desc:'160mm HVAC duct intersects 400mm deep structural beam at Node D3-B09. Requires duct reroute or beam penetration sleeve.',sev:'CRITICAL'},
+      {n:'Pipe vs Rebar Cage',loc:'Level 08 · Grid C2',desc:'50mm plumbing supply pipe conflicts with rebar cage RC-08C. 12 bar conflicts, 3 within cover zone.',sev:'CRITICAL'},
+      {n:'Fire Suppression vs Column',loc:'Level 11 · Grid B5',desc:'100mm sprinkler main passes through RC column C-11B. Requires structural review and potential column modification.',sev:'CRITICAL'},
+      {n:'Cable Tray vs HVAC Duct',loc:'Level 06 · Grid A1',desc:'E&I cable tray CT-06 and supply duct S06 occupy same ceiling void. 40mm clearance violation.',sev:'MEDIUM'},
+      {n:'Drainage vs Foundation',loc:'Level B1 · Grid F2',desc:'DN150 drainage pipe conflicts with pad foundation FP-B1F. Pipe requires 300mm offset.',sev:'MEDIUM'},
+      {n:'Stairwell vs Slab Opening',loc:'Level 04 · Grid E3',desc:'Stairwell ST-04 conflicts with slab opening OP-04E — 35mm positional offset from design.',sev:'MEDIUM'},
+      {n:'Lift Shaft vs Utilities',loc:'Level 02–14 · Core A',desc:'Lift shaft LS-A intersects conduit run C02 on levels 3,7,11. 3 separate clashes.',sev:'MEDIUM'},
+    ];
+    document.getElementById('clashTitle').textContent = data[idx].n;
+    document.getElementById('clashSev').textContent = data[idx].sev;
+    document.getElementById('clashSev').style.borderColor = idx<3?'var(--red)':'var(--amber)';
+    document.getElementById('clashSev').style.color = idx<3?'var(--red)':'var(--amber)';
+    document.getElementById('clashInfo').style.display='block';
+    document.getElementById('clashDetailText').textContent = data[idx].desc;
+    document.getElementById('clashDetailSub').textContent = data[idx].loc;
+  };
+
+  function resize() {
+    const p = canvas.parentElement;
+    canvas.width = p.offsetWidth; canvas.height = p.offsetHeight;
+  }
+  new ResizeObserver(resize).observe(canvas.parentElement); resize();
+
+  function draw() {
+    const W=canvas.width, H=canvas.height;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#090b0e'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(34,211,238,.04)';ctx.lineWidth=.5;
+    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+    const ox=W*.2, oy=H*.82;
+
+    function drawIsoBox(x,y,w,h,d,fc,tc,sc) {
+      const s=d*0.5;
+      const p={a:[x,y],b:[x+w,y],c:[x+w+s,y-d*.4],d:[x+s,y-d*.4],e:[x,y-h],f:[x+w,y-h],g:[x+w+s,y-h-d*.4],hh:[x+s,y-h-d*.4]};
+      ctx.beginPath();ctx.moveTo(p.a[0],p.a[1]);ctx.lineTo(p.b[0],p.b[1]);ctx.lineTo(p.f[0],p.f[1]);ctx.lineTo(p.e[0],p.e[1]);ctx.closePath();
+      ctx.fillStyle=fc;ctx.fill();ctx.strokeStyle='rgba(34,211,238,.15)';ctx.lineWidth=.5;ctx.stroke();
+      ctx.beginPath();ctx.moveTo(p.b[0],p.b[1]);ctx.lineTo(p.c[0],p.c[1]);ctx.lineTo(p.g[0],p.g[1]);ctx.lineTo(p.f[0],p.f[1]);ctx.closePath();
+      ctx.fillStyle=sc||'rgba(10,20,40,.8)';ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.moveTo(p.e[0],p.e[1]);ctx.lineTo(p.f[0],p.f[1]);ctx.lineTo(p.g[0],p.g[1]);ctx.lineTo(p.hh[0],p.hh[1]);ctx.closePath();
+      ctx.fillStyle=tc;ctx.fill();ctx.stroke();
+    }
+
+    for(let f=0;f<6;f++){
+      drawIsoBox(ox+20,oy-f*32,W*.55,28,W*.3,'rgba(15,30,60,.7)','rgba(20,45,90,.6)','rgba(12,24,52,.75)');
+    }
+    for(let c=0;c<3;c++){
+      drawIsoBox(ox+20+c*(W*.55/2.2),oy+2,10,6*32+28,10,'rgba(30,60,120,.5)','rgba(40,80,160,.4)',undefined);
+    }
+
+    // Clash markers
+    const clashes=[
+      {x:ox+W*.18,y:oy-5*32-10,r:14,c:[239,68,68]},
+      {x:ox+W*.35,y:oy-4*32-8,r:12,c:[239,68,68]},
+      {x:ox+W*.08,y:oy-3*32-6,r:13,c:[239,68,68]},
+      {x:ox+W*.22,y:oy-2*32-10,r:10,c:[245,158,11]},
+      {x:ox+W*.42,y:oy-1*32-5,r:10,c:[245,158,11]},
+      {x:ox+W*.28,y:oy-32-8,r:9,c:[245,158,11]},
+      {x:ox+W*.12,y:oy-5.5*32,r:9,c:[245,158,11]},
+    ];
+
+    clashes.forEach((cl,i)=>{
+      const pulse = .5+Math.sin(t*.08+i*1.1)*.5;
+      const [r,g,b]=cl.c;
+      ctx.beginPath(); ctx.arc(cl.x,cl.y,cl.r*(1+pulse*.3),0,Math.PI*2);
+      ctx.fillStyle=`rgba(${r},${g},${b},${.06+pulse*.05})`; ctx.fill();
+      ctx.beginPath(); ctx.arc(cl.x,cl.y,cl.r*.6,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${r},${g},${b},${.7+pulse*.3})`; ctx.fill();
+      if(i===selClash){
+        ctx.strokeStyle=`rgba(${r},${g},${b},${.8+pulse*.2})`; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.arc(cl.x,cl.y,cl.r*1.8,0,Math.PI*2); ctx.stroke();
+        // Lines to label
+        ctx.strokeStyle=`rgba(${r},${g},${b},.4)`; ctx.lineWidth=.5; ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(cl.x,cl.y); ctx.lineTo(cl.x+40,cl.y-30); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    });
+
+    t++; requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// BIM COMPARE CANVASES
+(function() {
+  function drawBIM(canvas, mode) {
+    canvas.width = canvas.offsetWidth||500; canvas.height = canvas.offsetHeight||300;
+    const ctx = canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+    ctx.fillStyle='#090b0e'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=mode==='scan'?'rgba(245,158,11,.15)':'rgba(34,211,238,.15)';
+    ctx.lineWidth=.5;
+    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+    const ox=W*.1,oy=H*.85;
+    for(let f=0;f<5;f++){
+      const fy=oy-f*H*.15;
+      const fc=mode==='scan'?'rgba(245,158,11,.1)':'rgba(34,211,238,.08)';
+      const tc=mode==='scan'?'rgba(245,158,11,.18)':'rgba(34,211,238,.14)';
+      ctx.strokeStyle=mode==='scan'?'rgba(245,158,11,.3)':'rgba(34,211,238,.25)';
+      ctx.lineWidth=.5;
+      const bw=W*.7, bd=W*.2;
+      // Front
+      ctx.fillStyle=fc; ctx.strokeStyle=mode==='scan'?'rgba(245,158,11,.3)':'rgba(34,211,238,.25)';
+      ctx.beginPath();ctx.rect(ox,fy-H*.12,bw,H*.12);ctx.fill();ctx.stroke();
+      if(mode==='scan'&&f===2){
+        ctx.strokeStyle='rgba(239,68,68,.8)'; ctx.lineWidth=1.5;
+        ctx.strokeRect(ox+bw*.4,fy-H*.12-2,bw*.18,H*.12+4);
+      }
+    }
+    ctx.fillStyle=mode==='scan'?'rgba(245,158,11,.5)':'rgba(34,211,238,.5)';
+    ctx.font='9px Space Mono,monospace';
+    ctx.fillText(mode==='scan'?'POINT CLOUD · 2024-05-12':'IFC MODEL · REV 14', 10, H-10);
+  }
+  setTimeout(()=>{
+    drawBIM(document.getElementById('bimCompCanvas'),'bim');
+    drawBIM(document.getElementById('scanCompCanvas'),'scan');
+  },200);
+
+  // Compare slider
+  const wrap = document.getElementById('compareWrap');
+  const after = document.getElementById('compareAfter');
+  const divider = document.getElementById('compareDivider');
+  const handle = document.getElementById('compareHandle');
+  let dragging=false, pct=50;
+  function setPos(x) {
+    const r=wrap.getBoundingClientRect();
+    pct=Math.max(5,Math.min(95,((x-r.left)/r.width)*100));
+    divider.style.left=pct+'%';
+    handle.style.left=pct+'%';
+    after.style.clipPath=`inset(0 ${100-pct}% 0 0)`;
+  }
+  handle.addEventListener('mousedown',()=>dragging=true);
+  wrap.addEventListener('mousedown',e=>{dragging=true;setPos(e.clientX)});
+  document.addEventListener('mousemove',e=>{if(dragging)setPos(e.clientX)});
+  document.addEventListener('mouseup',()=>dragging=false);
+  handle.addEventListener('touchstart',()=>dragging=true,{passive:true});
+  document.addEventListener('touchmove',e=>{if(dragging)setPos(e.touches[0].clientX)},{passive:true});
+  document.addEventListener('touchend',()=>dragging=false);
+})();
+
+// GANTT CHART
+(function() {
+  const tasks = [
+    ['Piling & Substructure',0,20,0,20,'done'],
+    ['Ground Beams',15,15,15,15,'done'],
+    ['RC Frame L1–L4',20,15,22,14,'done'],
+    ['RC Frame L5–L8',32,16,35,15,'done'],
+    ['RC Frame L9–L12',45,16,48,12,'active'],
+    ['RC Frame L13–L16',55,16,0,0,'upcoming'],
+    ['RC Frame L17–L22',65,20,0,0,'upcoming'],
+    ['MEP Rough-In L1–L8',30,25,32,18,'late'],
+    ['MEP Rough-In L9+',55,25,0,0,'upcoming'],
+    ['External Cladding',50,30,52,10,'active'],
+    ['Waterproofing',35,20,37,18,'done'],
+    ['Internal Fit-Out',60,30,0,0,'upcoming'],
+    ['M&E Commissioning',80,12,0,0,'upcoming'],
+    ['Practical Completion',92,8,0,0,'upcoming'],
+  ];
+  const months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG'];
+  const colors={'done':'var(--green)','late':'var(--red)','active':'var(--amber)','upcoming':'var(--border2)'};
+  const cont = document.getElementById('ganttContainer');
+  cont.innerHTML = tasks.map(([label,ps,pw,as,aw,status])=>{
+    const planBar = `<div class="gantt-bar bar-plan" style="left:${ps}%;width:${pw}%"></div>`;
+    const actualBar = aw>0?`<div class="gantt-bar" style="left:${as}%;width:${aw}%;background:${colors[status]}"></div>`:'';
+    const pct = aw>0?`<span class="gantt-pct">${Math.round(aw/pw*100)}%</span>`:'';
+    return `<div class="gantt-row"><div class="gantt-label">${label}</div><div class="gantt-track">${planBar}${actualBar}${pct}</div></div>`;
+  }).join('');
+})();
+
+// DELIVERY TIMELINE
+(function() {
+  const now = new Date();
+  document.getElementById('todayDate').textContent = now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  const deliveries = [
+    {time:'06:50',name:'Formwork Panels F14',detail:'VH-318 · Staging Area B',status:'done'},
+    {time:'07:08',name:'Ready-Mix Batch 03',detail:'VH-441 · Level 08 Zone',status:'done'},
+    {time:'07:45',name:'Rebar Bundle RC-08',detail:'VH-229 · Lay-down Area 3',status:'done'},
+    {time:'09:05',name:'Excavator Attachment',detail:'VH-105 · Equipment Yard',status:'done'},
+    {time:'10:15',name:'Ready-Mix Batch 04',detail:'VH-442 · Level 08 — ETA',status:'pending'},
+    {time:'11:00',name:'Curtain Wall Panels',detail:'VH-507 · Oversized — ETA',status:'pending'},
+    {time:'12:30',name:'MEP Materials Box 14–17',detail:'VH-334 · Store Room 2 — ETA',status:'pending'},
+    {time:'14:00',name:'Concrete Pump Extension',detail:'VH-218 · Crane Bay',status:'future'},
+    {time:'15:30',name:'Safety Equipment Restk.',detail:'VH-412 · Site Office',status:'future'},
+    {time:'17:00',name:'Waste Removal',detail:'VH-093 · Gate A Exit',status:'future'},
+  ];
+  document.getElementById('deliveryTimeline').innerHTML = deliveries.map(d=>{
+    const col=d.status==='done'?'var(--green)':d.status==='pending'?'var(--amber)':'var(--border2)';
+    const label=d.status==='done'?'ARRIVED':d.status==='pending'?'EN ROUTE':'SCHEDULED';
+    return `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text2);width:44px;flex-shrink:0;padding-top:2px">${d.time}</div>
+      <div style="flex:1"><div style="font-size:12px;color:var(--text)">${d.name}</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">${d.detail}</div></div>
+      <div style="font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid ${col};color:${col};background:${col==='var(--green)'?'var(--green-dim)':col==='var(--amber)'?'var(--amber-dim)':'transparent'};white-space:nowrap">${label}</div>
+    </div>`;
+  }).join('');
+})();
+
+// GAUGES
+function drawGauge(canvasId, value, max, color) {
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=140, H=90, cx=70, cy=76, r=52;
+  ctx.clearRect(0,0,W,H);
+  const startAngle = Math.PI*1.1, endAngle = Math.PI*1.9;
+  // Track
+  ctx.beginPath(); ctx.arc(cx,cy,r,startAngle,endAngle);
+  ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.lineWidth=8; ctx.lineCap='round'; ctx.stroke();
+  // Fill
+  const fillEnd = startAngle + (endAngle-startAngle)*Math.min(value/max,1);
+  ctx.beginPath(); ctx.arc(cx,cy,r,startAngle,fillEnd);
+  ctx.strokeStyle=color; ctx.lineWidth=8; ctx.stroke();
+  // Ticks
+  ctx.strokeStyle='rgba(255,255,255,.15)'; ctx.lineWidth=1;
+  for(let i=0;i<=10;i++){
+    const a = startAngle + (endAngle-startAngle)*i/10;
+    const inner=r-10, outer=r+2;
+    ctx.beginPath(); ctx.moveTo(cx+inner*Math.cos(a),cy+inner*Math.sin(a));
+    ctx.lineTo(cx+outer*Math.cos(a),cy+outer*Math.sin(a)); ctx.stroke();
+  }
+}
+drawGauge('gaugeNoise',74,100,'#10b981');
+drawGauge('gaugeCO2',428,1000,'#22d3ee');
+drawGauge('gaugeDust',68,100,'#ef4444');
+
+// TREND CHART
+(function() {
+  const canvas = document.getElementById('trendChart');
+  canvas.width = canvas.offsetWidth||400; canvas.height=120;
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const hours=['03h','04h','05h','06h','07h','08h','09h'];
+  const noise=[65,68,72,74,76,75,74];
+  const dust=[30,35,45,55,62,68,68];
+  const co2=[400,405,415,420,424,426,428];
+
+  function drawLine(data, max, color) {
+    ctx.beginPath();
+    data.forEach((v,i)=>{
+      const x=i*(W-40)/(data.length-1)+20;
+      const y=H-10-((v/max)*(H-20));
+      if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle=color; ctx.lineWidth=1.5; ctx.stroke();
+    data.forEach((v,i)=>{
+      const x=i*(W-40)/(data.length-1)+20;
+      const y=H-10-((v/max)*(H-20));
+      ctx.beginPath(); ctx.arc(x,y,2.5,0,Math.PI*2); ctx.fillStyle=color; ctx.fill();
+    });
+  }
+
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,.05)'; ctx.lineWidth=.5;
+  for(let i=0;i<4;i++){const y=10+i*(H-20)/3; ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+  drawLine(noise,100,'#10b981');
+  drawLine(dust,100,'#ef4444');
+  drawLine(co2,1000,'#22d3ee');
+
+  // X axis labels
+  ctx.fillStyle='rgba(255,255,255,.25)'; ctx.font='8px Space Mono,monospace';
+  hours.forEach((h,i)=>{
+    const x=i*(W-40)/(hours.length-1)+20;
+    ctx.fillText(h,x-8,H-1);
+  });
+
+  // Legend
+  [['Noise',4,'#10b981'],['PM2.5',60,'#ef4444'],['CO₂',116,'#22d3ee']].forEach(([l,lx,c])=>{
+    ctx.fillStyle=c; ctx.fillRect(lx,2,12,3); ctx.fillStyle='rgba(255,255,255,.4)';
+    ctx.fillText(l,lx+14,9);
+  });
+})();
+
+// Live data fluctuation
+setInterval(()=>{
+  const n = 70+Math.random()*10;
+  const d = 62+Math.random()*12;
+  const c = 420+Math.random()*20;
+  document.getElementById('noiseVal').textContent=Math.round(n);
+  document.getElementById('dustVal').textContent=Math.round(d);
+  document.getElementById('carbonVal').textContent=Math.round(c);
+  drawGauge('gaugeNoise',n,100,'#10b981');
+  drawGauge('gaugeCO2',c,1000,'#22d3ee');
+  drawGauge('gaugeDust',d,100,'#ef4444');
+  document.getElementById('noiseBar').style.width=(n)+'%';
+  document.getElementById('dustBar').style.width=Math.min(100,d/50*100)+'%';
+  document.getElementById('co2Bar').style.width=(c/1000*100)+'%';
+},3000);
+</script>
+</body>
+</html>
