@@ -317,6 +317,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
       Site Conditions
     </div>
+    <div class="nav-item" data-page="installation" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+      Installation Status
+    </div>
   </div>
   <div class="status-bar">
     <div class="status-item"><div class="dot live"></div>3 Robots Online</div>
@@ -329,7 +333,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 <div id="main">
   <div class="topbar">
     <div class="topbar-title" id="page-title">SITE CHECKER</div>
-    <div class="topbar-path" id="page-path" style="color:var(--text3);font-size:11px"> UNIVERSITY BUILDING - WEIMAR, FLOORS 1–3</div>
+    <div class="topbar-path" id="page-path" style="color:var(--text3);font-size:11px">UNIVERSITY BUILDING — WEIMAR · FLOORS 1–3</div>
     <div class="topbar-right">
       <div class="chip live">● LIVE</div>
       <div class="chip">REVISION 14</div>
@@ -832,6 +836,101 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       </div>
     </div>
 
+    <!-- ==================== INSTALLATION STATUS ==================== -->
+    <div class="page" id="page-installation">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh - 100px)">
+
+        <!-- LEFT: Component List -->
+        <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+
+          <!-- Summary stats -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex-shrink:0">
+            <div class="stat"><div class="stat-label">Scheduled</div><div class="stat-val">42</div><div class="stat-sub">Total components</div></div>
+            <div class="stat"><div class="stat-label">Arrived</div><div class="stat-val" style="color:var(--cyan)">31</div><div class="stat-sub">On site</div></div>
+            <div class="stat"><div class="stat-label">Installed</div><div class="stat-val" style="color:var(--amber)">24</div><div class="stat-sub">57% complete</div></div>
+            <div class="stat"><div class="stat-label">Inspected</div><div class="stat-val" style="color:var(--green)">19</div><div class="stat-sub">Robot approved</div></div>
+          </div>
+
+          <!-- Filter tabs -->
+          <div style="display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0">
+            <div class="tab active" id="filterAll" onclick="filterComponents('all',this)">All (42)</div>
+            <div class="tab" id="filterArrived" onclick="filterComponents('arrived',this)">Arrived</div>
+            <div class="tab" id="filterInstalled" onclick="filterComponents('installed',this)">Installed</div>
+            <div class="tab" id="filterInspected" onclick="filterComponents('inspected',this)">Inspected ✓</div>
+            <div class="tab" id="filterPending" onclick="filterComponents('pending',this)">Pending</div>
+          </div>
+
+          <!-- Component list -->
+          <div style="flex:1;overflow-y:auto;min-height:0" id="componentList"></div>
+        </div>
+
+        <!-- RIGHT: Floor breakdown + inspection log -->
+        <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+
+          <!-- Floor-by-floor progress -->
+          <div class="card" style="flex-shrink:0">
+            <div class="card-header"><span class="card-title">Installation by Floor — University Building Weimar</span></div>
+            <div class="card-body" style="padding:14px 16px">
+              <!-- Floor 1 -->
+              <div style="margin-bottom:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                  <span style="font-family:var(--mono);font-size:11px;color:var(--text2)">FLOOR 01 — Ground</span>
+                  <span style="font-family:var(--mono);font-size:10px;color:var(--green)">100% Inspected</span>
+                </div>
+                <div style="display:flex;gap:3px">
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--green)"></div>
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--green)"></div>
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--green)"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:var(--mono);margin-top:3px"><span>Structural ✓</span><span>MEP ✓</span><span>Envelope ✓</span></div>
+              </div>
+              <!-- Floor 2 -->
+              <div style="margin-bottom:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                  <span style="font-family:var(--mono);font-size:11px;color:var(--text2)">FLOOR 02 — First</span>
+                  <span style="font-family:var(--mono);font-size:10px;color:var(--amber)">In Progress</span>
+                </div>
+                <div style="display:flex;gap:3px">
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--green)"></div>
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--amber)"></div>
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--border2)"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:var(--mono);margin-top:3px"><span>Structural ✓</span><span>MEP — 60%</span><span>Envelope —</span></div>
+              </div>
+              <!-- Floor 3 -->
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                  <span style="font-family:var(--mono);font-size:11px;color:var(--text2)">FLOOR 03 — Second</span>
+                  <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">Not Started</span>
+                </div>
+                <div style="display:flex;gap:3px">
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--border2)"></div>
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--border2)"></div>
+                  <div style="flex:1;height:8px;border-radius:2px;background:var(--border2)"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:var(--mono);margin-top:3px"><span>Structural —</span><span>MEP —</span><span>Envelope —</span></div>
+              </div>
+              <!-- Legend -->
+              <div style="display:flex;gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+                <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)"><span style="width:10px;height:6px;border-radius:2px;background:var(--green);display:inline-block"></span>Inspected</span>
+                <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)"><span style="width:10px;height:6px;border-radius:2px;background:var(--amber);display:inline-block"></span>Installed</span>
+                <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)"><span style="width:10px;height:6px;border-radius:2px;background:var(--cyan-dim);border:1px solid var(--cyan);display:inline-block"></span>Arrived</span>
+                <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)"><span style="width:10px;height:6px;border-radius:2px;background:var(--border2);display:inline-block"></span>Pending</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Robot Inspection Log -->
+          <div class="card" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column">
+            <div class="card-header"><span class="card-title">Robot Inspection Log</span><span class="chip live">● Live</span></div>
+            <div style="overflow-y:auto;flex:1;padding:10px 14px">
+              <div class="timeline" id="inspectionLog"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- #content -->
 </div><!-- #main -->
 
@@ -849,7 +948,8 @@ function nav(el) {
     'asbuilt':'AS BUILT UPDATE',
     'progress':'PROGRESS TRACKING',
     'vehicles':'VEHICLE SCHEDULES',
-    'conditions':'SITE CONDITIONS'
+    'conditions':'SITE CONDITIONS',
+    'installation':'INSTALLATION STATUS'
   };
   document.getElementById('page-title').textContent = titles[page] || page.toUpperCase();
 }
@@ -1314,7 +1414,119 @@ setInterval(()=>{
   document.getElementById('noiseBar').style.width=(n)+'%';
   document.getElementById('dustBar').style.width=Math.min(100,d/50*100)+'%';
   document.getElementById('co2Bar').style.width=(c/1000*100)+'%';
-},3000);
-</script>
+// ==================== INSTALLATION STATUS ====================
+const components = [
+  // [id, name, category, floor, scheduled, status: 'pending'|'arrived'|'installed'|'inspected', robot, date, note]
+  ['C001','CLT Timber Panel — Floor Slab F01-A','Structural','Floor 01','2024-04-08','inspected','R01','2024-04-10','Thickness ±1mm — PASS'],
+  ['C002','CLT Timber Panel — Floor Slab F01-B','Structural','Floor 01','2024-04-08','inspected','R01','2024-04-10','Conformance confirmed'],
+  ['C003','Glulam Beam — Grid A1–A4','Structural','Floor 01','2024-04-09','inspected','R02','2024-04-11','Bearing alignment ✓'],
+  ['C004','Glulam Beam — Grid B1–B4','Structural','Floor 01','2024-04-09','inspected','R02','2024-04-11','No deviations'],
+  ['C005','Steel Column — Core C1','Structural','Floor 01','2024-04-10','inspected','R03','2024-04-12','Plumb ±0.5mm — PASS'],
+  ['C006','Steel Column — Core C2','Structural','Floor 01','2024-04-10','inspected','R03','2024-04-12','PASS'],
+  ['C007','Concrete Foundation Pad — FP-01','Structural','Floor 01','2024-04-05','inspected','R01','2024-04-06','Cube strength 42 MPa ✓'],
+  ['C008','HVAC Ductwork — Supply Zone A','MEP','Floor 01','2024-04-14','inspected','R02','2024-04-16','Pressure test passed'],
+  ['C009','Plumbing Riser — PR-01','MEP','Floor 01','2024-04-13','inspected','R01','2024-04-15','Leak test ✓'],
+  ['C010','Electrical Conduit — Main Run E1','MEP','Floor 01','2024-04-15','inspected','R03','2024-04-17','Continuity confirmed'],
+  ['C011','Curtain Wall Panel — CW-01A','Envelope','Floor 01','2024-04-18','inspected','R02','2024-04-20','Seal test passed'],
+  ['C012','Curtain Wall Panel — CW-01B','Envelope','Floor 01','2024-04-18','inspected','R02','2024-04-20','Alignment ±2mm ✓'],
+  ['C013','Sprinkler Main — Level 1','MEP','Floor 01','2024-04-16','inspected','R01','2024-04-18','Flow rate confirmed'],
+  ['C014','CLT Panel — Floor Slab F02-A','Structural','Floor 02','2024-04-22','inspected','R01','2024-04-24','PASS'],
+  ['C015','CLT Panel — Floor Slab F02-B','Structural','Floor 02','2024-04-22','inspected','R02','2024-04-24','PASS'],
+  ['C016','Glulam Beam — Grid A1–A4 F02','Structural','Floor 02','2024-04-23','inspected','R03','2024-04-25','No deviation'],
+  ['C017','Steel Column — Core C1 F02','Structural','Floor 02','2024-04-24','installed','R01','—','Awaiting inspection'],
+  ['C018','Steel Column — Core C2 F02','Structural','Floor 02','2024-04-24','installed','—','—','Scheduled R02'],
+  ['C019','HVAC Ductwork — Supply Zone B','MEP','Floor 02','2024-04-28','installed','—','—','Installed, not yet inspected'],
+  ['C020','Plumbing Riser — PR-02','MEP','Floor 02','2024-04-27','installed','—','—','Pressure test pending'],
+  ['C021','Electrical Conduit — Main Run E2','MEP','Floor 02','2024-04-29','arrived','—','—','In lay-down area'],
+  ['C022','Curtain Wall Panel — CW-02A','Envelope','Floor 02','2024-05-02','arrived','—','—','Staging Area B'],
+  ['C023','Curtain Wall Panel — CW-02B','Envelope','Floor 02','2024-05-02','arrived','—','—','Staging Area B'],
+  ['C024','Sprinkler Main — Level 2','MEP','Floor 02','2024-04-30','arrived','—','—','Awaiting installation'],
+  ['C025','Raised Floor System — RF-02A','Finishes','Floor 02','2024-05-05','arrived','—','—','On site, not installed'],
+  ['C026','CLT Panel — Floor Slab F03-A','Structural','Floor 03','2024-05-10','arrived','—','—','Delivered early'],
+  ['C027','CLT Panel — Floor Slab F03-B','Structural','Floor 03','2024-05-10','pending','—','—','Awaiting delivery'],
+  ['C028','Glulam Beam — Grid A1–A4 F03','Structural','Floor 03','2024-05-12','pending','—','—','—'],
+  ['C029','Glulam Beam — Grid B1–B4 F03','Structural','Floor 03','2024-05-12','pending','—','—','—'],
+  ['C030','Steel Column — Core C1 F03','Structural','Floor 03','2024-05-14','pending','—','—','—'],
+  ['C031','Steel Column — Core C2 F03','Structural','Floor 03','2024-05-14','pending','—','—','—'],
+  ['C032','HVAC Ductwork — Zone C F03','MEP','Floor 03','2024-05-20','pending','—','—','—'],
+  ['C033','Plumbing Riser — PR-03','MEP','Floor 03','2024-05-18','pending','—','—','—'],
+  ['C034','Electrical Conduit — Run E3','MEP','Floor 03','2024-05-22','pending','—','—','—'],
+  ['C035','Curtain Wall Panel — CW-03A','Envelope','Floor 03','2024-05-28','pending','—','—','—'],
+  ['C036','Curtain Wall Panel — CW-03B','Envelope','Floor 03','2024-05-28','pending','—','—','—'],
+  ['C037','Roof CLT Panel — R01','Structural','Roof','2024-06-02','pending','—','—','—'],
+  ['C038','Roof CLT Panel — R02','Structural','Roof','2024-06-02','pending','—','—','—'],
+  ['C039','Roof Membrane — Zone A','Envelope','Roof','2024-06-08','pending','—','—','—'],
+  ['C040','Sprinkler Main — Level 3','MEP','Floor 03','2024-05-25','pending','—','—','—'],
+  ['C041','Lift Equipment — Main Car','Mechanical','Core','2024-06-10','pending','—','—','Long-lead item'],
+  ['C042','Raised Floor System — RF-03','Finishes','Floor 03','2024-06-05','pending','—','—','—'],
+];
+
+const statusConfig = {
+  'inspected': {label:'INSPECTED', color:'var(--green)', bg:'var(--green-dim)', border:'rgba(16,185,129,.25)'},
+  'installed': {label:'INSTALLED', color:'var(--amber)', bg:'var(--amber-dim)', border:'rgba(245,158,11,.25)'},
+  'arrived':   {label:'ON SITE',   color:'var(--cyan)',  bg:'var(--cyan-dim)',  border:'rgba(34,211,238,.25)'},
+  'pending':   {label:'PENDING',   color:'var(--text3)', bg:'var(--panel)',     border:'var(--border)'},
+};
+
+const catColors = {
+  'Structural':'var(--cyan)','MEP':'var(--amber)','Envelope':'var(--purple)',
+  'Finishes':'var(--green)','Mechanical':'var(--red)'
+};
+
+let currentFilter = 'all';
+
+function renderComponents(filter) {
+  const list = document.getElementById('componentList');
+  if(!list) return;
+  const filtered = filter === 'all' ? components : components.filter(c => c[5] === filter);
+  list.innerHTML = filtered.map(c => {
+    const [id,name,cat,floor,sched,status,robot,date,note] = c;
+    const sc = statusConfig[status];
+    const cc = catColors[cat] || 'var(--text3)';
+    const robotBadge = robot !== '—' ? `<span style="font-family:var(--mono);font-size:9px;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(34,211,238,.2);padding:1px 5px;border-radius:2px">${robot}</span>` : '';
+    return `<div style="display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-radius:6px;margin-bottom:6px;background:var(--panel);border:1px solid var(--border);cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);width:36px;flex-shrink:0;padding-top:2px">${id}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap">
+          <span style="font-size:9px;font-family:var(--mono);color:${cc};background:rgba(0,0,0,.3);border:1px solid ${cc};padding:1px 5px;border-radius:2px;opacity:.8">${cat}</span>
+          <span style="font-size:9px;color:var(--text3);font-family:var(--mono)">${floor}</span>
+          <span style="font-size:9px;color:var(--text3);font-family:var(--mono)">Sched: ${sched}</span>
+          ${robotBadge}
+        </div>
+        ${note !== '—' ? `<div style="font-size:10px;color:var(--text3);margin-top:3px;font-family:var(--mono)">${note}</div>` : ''}
+      </div>
+      <div style="flex-shrink:0;text-align:right">
+        <span style="font-family:var(--mono);font-size:9px;padding:3px 7px;border-radius:3px;background:${sc.bg};color:${sc.color};border:1px solid ${sc.border}">${sc.label}</span>
+        ${date !== '—' ? `<div style="font-size:9px;color:var(--text3);font-family:var(--mono);margin-top:3px">${date}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.filterComponents = function(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderComponents(filter);
+};
+
+// Inspection log
+const inspLog = document.getElementById('inspectionLog');
+if(inspLog) {
+  const logItems = components.filter(c=>c[5]==='inspected').reverse().slice(0,12);
+  inspLog.innerHTML = logItems.map(c=>{
+    const [id,name,cat,floor,,status,robot,date,note] = c;
+    const isLatest = logItems.indexOf(c) < 2;
+    return `<div class="tl-item">
+      <div class="tl-dot ${isLatest?'active':'done'}"></div>
+      <div class="tl-title" style="font-size:12px">${name}</div>
+      <div class="tl-detail">${robot} · ${date} · ${floor} · ${note}</div>
+    </div>`;
+  }).join('');
+}
+
+renderComponents('all');
+
 </body>
 </html>
