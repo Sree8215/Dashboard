@@ -420,6 +420,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
             </div>
             <div style="flex:1;min-height:0;position:relative;overflow:hidden;border-radius:0 0 8px 8px">
               <div class="bim-grid" style="position:absolute;inset:0;z-index:0"></div>
+              <!-- BIM screenshot — replace src with your BIM screenshot filename -->
               <img src="BIM_image.jpeg" alt="BIM Model"
                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.88;z-index:1;">
               <canvas id="bimCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:2"></canvas>
@@ -954,73 +955,60 @@ setInterval(updateClock,1000); updateClock();
 (function() {
   const canvas = document.getElementById('bimCanvas');
   const parent = canvas.parentElement;
-  canvas.width = parent.offsetWidth || 400;
-  canvas.height = parent.offsetHeight || 300;
+
+  function resize() {
+    canvas.width = parent.offsetWidth || 400;
+    canvas.height = parent.offsetHeight || 300;
+  }
+  new ResizeObserver(resize).observe(parent);
+  resize();
+
   const ctx = canvas.getContext('2d');
   let t = 0;
 
-  function drawIso(ctx, x, y, w, h, d, col, top, side, front) {
-    const s = d * Math.cos(Math.PI/6);
-    const pts = {
-      a:[x,y], b:[x+w,y], c:[x+w+s,y-d*.5], d:[x+s,y-d*.5],
-      e:[x,y-h], f:[x+w,y-h], g:[x+w+s,y-h-d*.5], h:[x+s,y-h-d*.5]
-    };
-    ctx.beginPath();
-    ctx.moveTo(pts.a[0],pts.a[1]);ctx.lineTo(pts.b[0],pts.b[1]);
-    ctx.lineTo(pts.f[0],pts.f[1]);ctx.lineTo(pts.e[0],pts.e[1]);ctx.closePath();
-    ctx.fillStyle=front||col; ctx.fill();
-    ctx.strokeStyle='rgba(34,211,238,.3)';ctx.lineWidth=.5;ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(pts.b[0],pts.b[1]);ctx.lineTo(pts.c[0],pts.c[1]);
-    ctx.lineTo(pts.g[0],pts.g[1]);ctx.lineTo(pts.f[0],pts.f[1]);ctx.closePath();
-    ctx.fillStyle=side||'rgba(30,40,60,.8)'; ctx.fill(); ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(pts.e[0],pts.e[1]);ctx.lineTo(pts.f[0],pts.f[1]);
-    ctx.lineTo(pts.g[0],pts.g[1]);ctx.lineTo(pts.h[0],pts.h[1]);ctx.closePath();
-    ctx.fillStyle=top||'rgba(40,55,80,.9)'; ctx.fill(); ctx.stroke();
-  }
-
   function draw() {
     const W = canvas.width, H = canvas.height;
+    // Fully transparent — image below shows through
     ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='#090b0e'; ctx.fillRect(0,0,W,H);
 
-    // Grid
-    ctx.strokeStyle='rgba(34,211,238,.04)';ctx.lineWidth=.5;
+    // Subtle cyan grid overlay only
+    ctx.strokeStyle='rgba(34,211,238,.06)';ctx.lineWidth=.5;
     for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
     for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
 
-    const ox=W*.18, oy=H*.78;
-    // Draw floors
-    for(let f=0;f<8;f++) {
-      const fy = oy - f*28;
-      const isActive = f===7;
-      const col = isActive?'rgba(245,158,11,.15)':'rgba(20,40,80,.6)';
-      const tc = isActive?'rgba(245,158,11,.25)':'rgba(30,55,110,.5)';
-      drawIso(ctx, ox+20, fy, 180, 24, 80, col, tc, undefined, undefined);
-    }
-
-    // Columns
-    [[ox+24,oy-8*28+24],[ox+200,oy-8*28+24],[ox+24,oy-4*28+24],[ox+200,oy-4*28+24]].forEach(([cx,cy])=>{
-      drawIso(ctx,cx,oy-1,8,cy-(oy-1),4,'rgba(100,140,200,.3)','rgba(120,170,240,.2)',undefined,undefined);
-    });
-
-    // Deviation highlights
+    // Pulsing deviation highlights overlay
     const pulse = .5+Math.sin(t*.06)*.5;
-    ctx.strokeStyle=`rgba(239,68,68,${.4+pulse*.4})`; ctx.lineWidth=1.5;
-    ctx.strokeRect(ox+80,oy-8*28-8,60,40);
-    ctx.fillStyle=`rgba(239,68,68,${.05+pulse*.08})`; ctx.fillRect(ox+80,oy-8*28-8,60,40);
 
-    ctx.strokeStyle=`rgba(245,158,11,${.3+pulse*.3})`; ctx.lineWidth=1;
-    ctx.setLineDash([3,3]); ctx.strokeRect(ox+160,oy-6*28-5,50,30); ctx.setLineDash([]);
+    // Red deviation box — Column C4-L8
+    ctx.strokeStyle=`rgba(239,68,68,${.5+pulse*.5})`; ctx.lineWidth=2;
+    ctx.strokeRect(W*.35, H*.18, W*.18, H*.14);
+    ctx.fillStyle=`rgba(239,68,68,${.06+pulse*.08})`; ctx.fillRect(W*.35, H*.18, W*.18, H*.14);
+    ctx.fillStyle=`rgba(239,68,68,${.85+pulse*.15})`; ctx.font='bold 9px Space Mono,monospace';
+    ctx.fillText('⚠ COL C4', W*.35+4, H*.18-4);
 
-    // Level labels
-    ctx.fillStyle='rgba(34,211,238,.5)'; ctx.font='8px Space Mono, monospace';
-    for(let f=0;f<8;f++){
-      ctx.fillText('L'+(f+1).toString().padStart(2,'0'), ox+2, oy-f*28-8);
-    }
+    // Amber dashed box — Beam B2-L8
+    ctx.strokeStyle=`rgba(245,158,11,${.4+pulse*.3})`; ctx.lineWidth=1.5;
+    ctx.setLineDash([4,3]);
+    ctx.strokeRect(W*.55, H*.42, W*.16, H*.1);
+    ctx.setLineDash([]);
+    ctx.fillStyle=`rgba(245,158,11,${.8+pulse*.2})`; ctx.font='bold 9px Space Mono,monospace';
+    ctx.fillText('! BEAM B2', W*.55+4, H*.42-4);
+
+    // Scan line sweep
+    const scanY = (t*1.5) % H;
+    const grad = ctx.createLinearGradient(0, scanY-6, 0, scanY+6);
+    grad.addColorStop(0,'rgba(34,211,238,0)');
+    grad.addColorStop(.5,`rgba(34,211,238,${.08+pulse*.04})`);
+    grad.addColorStop(1,'rgba(34,211,238,0)');
+    ctx.fillStyle=grad; ctx.fillRect(0, scanY-6, W, 12);
+
+    // Corner brackets
+    const bSize=16, bW=2;
+    ctx.strokeStyle=`rgba(245,158,11,.6)`; ctx.lineWidth=bW;
+    [[6,6,'tl'],[W-6,6,'tr'],[6,H-6,'bl'],[W-6,H-6,'br']].forEach(([cx,cy,pos])=>{
+      const dx=pos.includes('r')?-bSize:bSize, dy=pos.includes('b')?-bSize:bSize;
+      ctx.beginPath(); ctx.moveTo(cx+dx,cy); ctx.lineTo(cx,cy); ctx.lineTo(cx,cy+dy); ctx.stroke();
+    });
 
     t++; requestAnimationFrame(draw);
   }
