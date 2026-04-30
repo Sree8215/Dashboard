@@ -127,12 +127,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 }
 
 /* BIM VIEWER */
-<div class="bim-canvas" style="height:300px;position:relative">
-  <div class="bim-grid"></div>
-  <img src="BIM_image.jpeg" alt="BIM View"
-    style="position:absolute;inset:0;width:100%;height:100%;
-           object-fit:cover;opacity:0.85;z-index:0;">
-  <canvas id="bimCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:1"></canvas>
+.bim-canvas{position:relative;background:#0a0c10;border-radius:6px;overflow:hidden}
+.bim-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(34,211,238,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,211,238,.05) 1px,transparent 1px);
+  background-size:40px 40px;
+}
 
 /* CLASH */
 .clash-item{
@@ -339,26 +340,29 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 
     <!-- ==================== SITE CHECKER ==================== -->
     <div class="page active" id="page-site-checker">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh - 160px)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh - 100px)">
 
-        <!-- Robot Feed -->
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div class="card" style="flex:1;min-height:0">
-            <div class="card-header">
+        <!-- LEFT: Robot Feed -->
+        <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+
+          <!-- Camera card — fills remaining space -->
+          <div class="card" style="flex:1;min-height:0;display:flex;flex-direction:column">
+            <div class="card-header" style="flex-shrink:0">
               <span class="card-title">Robot Cam — Unit R03</span>
               <div style="display:flex;gap:8px;align-items:center">
                 <input type="file" id="photoFileInput" accept="image/*" style="display:none">
-                <button id="uploadPhotoBtn" style="font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer">📷 Upload Site Photo</button>
+                <button id="uploadPhotoBtn" style="font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer">📷 Photo</button>
                 <span class="chip live">● REC</span>
                 <span class="chip">30 FPS</span>
               </div>
             </div>
-            <div class="card-body" style="padding:12px">
-              <div class="robot-feed" id="robotFeed" style="height:240px">
+            <!-- Feed fills card -->
+            <div style="flex:1;min-height:0;position:relative;overflow:hidden">
+              <div class="robot-feed" id="robotFeed" style="height:100%;aspect-ratio:unset">
                 <img id="sitePhoto" src="SITE_IMAGE.jpeg" alt="Site View"
-                  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;transition:opacity .8s;border-radius:0;z-index:0;">
+                  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;border-radius:0;z-index:0;">
                 <canvas id="feedCanvas" style="z-index:1;position:absolute;inset:0;width:100%;height:100%"></canvas>
-                <div class="feed-overlay">
+                <div class="feed-overlay" style="z-index:2">
                   <div class="scan-line"></div>
                   <div class="corner tl"></div><div class="corner tr"></div>
                   <div class="corner bl"></div><div class="corner br"></div>
@@ -371,70 +375,78 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
             </div>
           </div>
 
-          <!-- Alerts -->
-          <div class="card">
-            <div class="card-header"><span class="card-title">Live Alerts</span><span class="chip">3 Active</span></div>
-            <div class="card-body" style="padding:10px 14px">
-              <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-                <div style="width:8px;height:8px;border-radius:50%;background:var(--red);margin-top:3px;flex-shrink:0;animation:pulse 1.5s infinite"></div>
-                <div><div style="font-size:12px;color:var(--text)">Rebar spacing deviation — Level 8, Grid C4</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">R03 · 09:39:14 · CRITICAL</div></div>
+          <!-- Alerts + Robot status in one compact row -->
+          <div style="display:grid;grid-template-columns:1fr auto;gap:10px;flex-shrink:0">
+            <div class="card">
+              <div class="card-header" style="padding:8px 14px">
+                <span class="card-title">Live Alerts</span>
+                <span class="chip" style="background:var(--red-dim);color:var(--red);border-color:rgba(239,68,68,.3)">3 Active</span>
               </div>
-              <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-                <div style="width:8px;height:8px;border-radius:50%;background:var(--amber);margin-top:3px;flex-shrink:0"></div>
-                <div><div style="font-size:12px;color:var(--text)">Formwork alignment ±8mm — Level 7, Grid B2</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">R01 · 09:35:52 · WARNING</div></div>
-              </div>
-              <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0">
-                <div style="width:8px;height:8px;border-radius:50%;background:var(--amber);margin-top:3px;flex-shrink:0"></div>
-                <div><div style="font-size:12px;color:var(--text)">Concrete pour rate below spec — Level 8 East</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">R02 · 09:28:07 · WARNING</div></div>
+              <div style="padding:0 14px">
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+                  <div style="width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;animation:pulse 1.5s infinite"></div>
+                  <div style="flex:1;min-width:0"><div style="font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Rebar spacing deviation — L8, Grid C4</div><div style="font-size:9px;color:var(--text3);font-family:var(--mono)">R03 · 09:39:14 · CRITICAL</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+                  <div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div>
+                  <div style="flex:1;min-width:0"><div style="font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Formwork alignment ±8mm — L7, Grid B2</div><div style="font-size:9px;color:var(--text3);font-family:var(--mono)">R01 · 09:35:52 · WARNING</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+                  <div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div>
+                  <div style="flex:1;min-width:0"><div style="font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Concrete pour rate below spec — L8 East</div><div style="font-size:9px;color:var(--text3);font-family:var(--mono)">R02 · 09:28:07 · WARNING</div></div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- Robot Status -->
-          <div class="grid3">
-            <div class="stat"><div class="stat-label">R01 Status</div><div class="stat-val" style="color:var(--green);font-size:14px">ACTIVE</div><div class="stat-sub">Level 07 — B2</div></div>
-            <div class="stat"><div class="stat-label">R02 Status</div><div class="stat-val" style="color:var(--green);font-size:14px">ACTIVE</div><div class="stat-sub">Level 08 — D1</div></div>
-            <div class="stat"><div class="stat-label">R03 Status</div><div class="stat-val" style="color:var(--amber);font-size:14px">ALERT</div><div class="stat-sub">Level 08 — C4</div></div>
+            <!-- Robot status column -->
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:100px">
+              <div class="stat" style="padding:8px 10px;flex:1"><div class="stat-label" style="font-size:8px">R01</div><div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--green)">ACTIVE</div><div style="font-size:9px;color:var(--text3)">L07 — B2</div></div>
+              <div class="stat" style="padding:8px 10px;flex:1"><div class="stat-label" style="font-size:8px">R02</div><div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--green)">ACTIVE</div><div style="font-size:9px;color:var(--text3)">L08 — D1</div></div>
+              <div class="stat" style="padding:8px 10px;flex:1;border-color:rgba(245,158,11,.3)"><div class="stat-label" style="font-size:8px">R03</div><div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--amber)">ALERT</div><div style="font-size:9px;color:var(--text3)">L08 — C4</div></div>
+            </div>
           </div>
         </div>
 
-        <!-- BIM Panel -->
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div class="card" style="flex:1;min-height:0">
-            <div class="card-header">
-              <span class="card-title">BIM Model — Live View</span>
+        <!-- RIGHT: BIM Panel -->
+        <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+
+          <!-- BIM card — fills remaining space -->
+          <div class="card" style="flex:1;min-height:0;display:flex;flex-direction:column">
+            <div class="card-header" style="flex-shrink:0">
+              <span class="card-title">BIM Model — Level 08 · Grid C4</span>
               <div style="display:flex;gap:8px">
                 <span class="chip">IFC 2x3</span>
                 <span class="chip live">SYNCED</span>
               </div>
             </div>
-            <div class="card-body" style="padding:12px">
-              <div class="bim-canvas" style="height:300px;position:relative">
-                <div class="bim-grid"></div>
-                <canvas id="bimCanvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
-                <div style="position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9px;color:var(--cyan);background:rgba(0,0,0,.6);padding:2px 6px;border-radius:2px">IFC MODEL · REV 14 · Δ SITE SCAN</div>
-                <div style="position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:9px;color:var(--amber);background:rgba(0,0,0,.6);padding:2px 6px;border-radius:2px">⚠ 3 DEVIATIONS FLAGGED</div>
-              </div>
+            <div style="flex:1;min-height:0;position:relative;overflow:hidden;border-radius:0 0 8px 8px">
+              <div class="bim-grid" style="position:absolute;inset:0;z-index:0"></div>
+              <!-- BIM screenshot — replace src with your BIM screenshot filename -->
+              <img src="BIM_image.jpeg" alt="BIM Model"
+                style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.88;z-index:1;">
+              <canvas id="bimCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:2"></canvas>
+              <div style="position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9px;color:var(--cyan);background:rgba(0,0,0,.75);padding:2px 8px;border-radius:2px;z-index:3">IFC MODEL · REV 14 · Δ SITE SCAN</div>
+              <div style="position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:9px;color:var(--amber);background:rgba(0,0,0,.75);padding:2px 8px;border-radius:2px;z-index:3">⚠ 3 DEVIATIONS FLAGGED</div>
+              <div style="position:absolute;top:10px;left:12px;font-family:var(--mono);font-size:9px;color:var(--text2);background:rgba(0,0,0,.6);padding:2px 8px;border-radius:2px;z-index:3">MATCHING VIEW: R03 CAM</div>
             </div>
           </div>
 
-          <!-- Deviation Table -->
-          <div class="card">
-            <div class="card-header"><span class="card-title">Site vs BIM Deviations</span></div>
+          <!-- Deviation Table compact -->
+          <div class="card" style="flex-shrink:0">
+            <div class="card-header" style="padding:8px 14px"><span class="card-title">Site vs BIM Deviations</span></div>
             <div class="card-body" style="padding:0">
-              <table style="width:100%;font-size:12px;border-collapse:collapse">
+              <table style="width:100%;font-size:11px;border-collapse:collapse">
                 <thead>
                   <tr style="border-bottom:1px solid var(--border)">
-                    <th style="text-align:left;padding:8px 14px;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400">Element</th>
-                    <th style="text-align:left;padding:8px 14px;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400">Plan</th>
-                    <th style="text-align:left;padding:8px 14px;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400">Actual</th>
-                    <th style="text-align:left;padding:8px 14px;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400">Delta</th>
+                    <th style="text-align:left;padding:6px 14px;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">Element</th>
+                    <th style="text-align:left;padding:6px 14px;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">Plan</th>
+                    <th style="text-align:left;padding:6px 14px;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">Actual</th>
+                    <th style="text-align:left;padding:6px 14px;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">Delta</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 14px;color:var(--text)">Column C4-L8</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">300mm</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">292mm</td><td style="padding:7px 14px;color:var(--red);font-family:var(--mono)">-8mm ⚠</td></tr>
-                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 14px;color:var(--text)">Slab L7-East</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">200mm</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">203mm</td><td style="padding:7px 14px;color:var(--green);font-family:var(--mono)">+3mm ✓</td></tr>
-                  <tr><td style="padding:7px 14px;color:var(--text)">Beam B2-L8</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">450mm</td><td style="padding:7px 14px;color:var(--text3);font-family:var(--mono)">458mm</td><td style="padding:7px 14px;color:var(--amber);font-family:var(--mono)">+8mm !</td></tr>
+                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:6px 14px;color:var(--text)">Column C4-L8</td><td style="padding:6px 14px;color:var(--text3);font-family:var(--mono)">300mm</td><td style="padding:6px 14px;color:var(--text3);font-family:var(--mono)">292mm</td><td style="padding:6px 14px;color:var(--red);font-family:var(--mono)">-8mm ⚠</td></tr>
+                  <tr style="border-bottom:1px solid var(--border)"><td style="padding:6px 14px;color:var(--text)">Slab L7-East</td><td style="padding:6px 14px;color:var(--text3);font-family:var(--mono)">200mm</td><td style="padding:6px 14px;color:var(--text3);font-family:var(--mono)">203mm</td><td style="padding:6px 14px;color:var(--green);font-family:var(--mono)">+3mm ✓</td></tr>
+                  <tr><td style="padding:6px 14px;color:var(--text)">Beam B2-L8</td><td style="padding:6px 14px;color:var(--text3);font-family:var(--mono)">450mm</td><td style="padding:6px 14px;color:var(--text3);font-family:var(--mono)">458mm</td><td style="padding:6px 14px;color:var(--amber);font-family:var(--mono)">+8mm !</td></tr>
                 </tbody>
               </table>
             </div>
