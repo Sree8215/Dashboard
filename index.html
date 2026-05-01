@@ -8,25 +8,25 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0d0f11;
-  --surface:#13161a;
-  --panel:#181c21;
-  --card:#1e2329;
-  --border:#2a2f38;
-  --border2:#343c47;
-  --amber:#f59e0b;
-  --amber2:#fbbf24;
-  --amber-dim:#78400a;
-  --cyan:#22d3ee;
-  --cyan-dim:#0e5a6b;
-  --green:#10b981;
-  --green-dim:#064e33;
-  --red:#ef4444;
-  --red-dim:#5a1a1a;
-  --purple:#a78bfa;
-  --text:#e2e8f0;
-  --text2:#94a3b8;
-  --text3:#4b5563;
+  --bg:#f0f2f5;
+  --surface:#ffffff;
+  --panel:#f7f8fa;
+  --card:#ffffff;
+  --border:#e2e6ed;
+  --border2:#cdd3dc;
+  --amber:#d97706;
+  --amber2:#f59e0b;
+  --amber-dim:#fef3c7;
+  --cyan:#0891b2;
+  --cyan-dim:#e0f7fa;
+  --green:#059669;
+  --green-dim:#d1fae5;
+  --red:#dc2626;
+  --red-dim:#fee2e2;
+  --purple:#7c3aed;
+  --text:#111827;
+  --text2:#374151;
+  --text3:#9ca3af;
   --mono:'Space Mono',monospace;
   --sans:'DM Sans',sans-serif;
 }
@@ -104,7 +104,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 .stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
 
 /* FEED VIEWER */
-.feed-container{position:relative;background:#050709;border-radius:6px;overflow:hidden}
+.feed-container{position:relative;background:#e8ecf0;border-radius:6px;overflow:hidden}
 .feed-overlay{position:absolute;inset:0;pointer-events:none}
 .scan-line{
   position:absolute;left:0;right:0;height:2px;
@@ -119,19 +119,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 .corner.br{bottom:8px;right:8px;border-width:0 2px 2px 0}
 .feed-label{
   position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9px;
-  color:var(--cyan);background:rgba(0,0,0,.6);padding:2px 6px;border-radius:2px;
+  color:var(--cyan);background:rgba(255,255,255,.82);padding:2px 6px;border-radius:2px;
 }
 .feed-ts{
   position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:9px;
-  color:var(--amber);background:rgba(0,0,0,.6);padding:2px 6px;border-radius:2px;
+  color:var(--amber);background:rgba(255,255,255,.82);padding:2px 6px;border-radius:2px;
 }
 
 /* BIM VIEWER */
-.bim-canvas{position:relative;background:#0a0c10;border-radius:6px;overflow:hidden}
+.bim-canvas{position:relative;background:#e8ecf0;border-radius:6px;overflow:hidden}
 .bim-grid{
   position:absolute;inset:0;
-  background-image:linear-gradient(rgba(34,211,238,.05) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(34,211,238,.05) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(8,145,178,.1) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(8,145,178,.1) 1px,transparent 1px);
   background-size:40px 40px;
 }
 
@@ -241,7 +241,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 }
 .compare-label{
   position:absolute;bottom:8px;font-family:var(--mono);font-size:9px;padding:2px 6px;
-  border-radius:2px;background:rgba(0,0,0,.7);z-index:7;
+  border-radius:2px;background:rgba(255,255,255,.82);z-index:7;
 }
 
 /* SCROLLBAR */
@@ -424,9 +424,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
               <img src="BIM_image.jpeg" alt="BIM Model"
                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.88;z-index:1;">
               <canvas id="bimCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:2"></canvas>
-              <div style="position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9px;color:var(--cyan);background:rgba(0,0,0,.75);padding:2px 8px;border-radius:2px;z-index:3">IFC MODEL · REV 14 · Δ SITE SCAN</div>
-              <div style="position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:9px;color:var(--amber);background:rgba(0,0,0,.75);padding:2px 8px;border-radius:2px;z-index:3">⚠ 3 DEVIATIONS FLAGGED</div>
-              <div style="position:absolute;top:10px;left:12px;font-family:var(--mono);font-size:9px;color:var(--text2);background:rgba(0,0,0,.6);padding:2px 8px;border-radius:2px;z-index:3">MATCHING VIEW: R03 CAM</div>
+              <div style="position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9px;color:var(--cyan);background:rgba(255,255,255,.85);padding:2px 8px;border-radius:2px;z-index:3">IFC MODEL · REV 14 · Δ SITE SCAN</div>
+              <div style="position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:9px;color:var(--amber);background:rgba(255,255,255,.85);padding:2px 8px;border-radius:2px;z-index:3">⚠ 3 DEVIATIONS FLAGGED</div>
+              <div style="position:absolute;top:10px;left:12px;font-family:var(--mono);font-size:9px;color:var(--text2);background:rgba(255,255,255,.82);padding:2px 8px;border-radius:2px;z-index:3">MATCHING VIEW: R03 CAM</div>
             </div>
           </div>
 
@@ -513,7 +513,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
             <span class="chip" id="clashSev">—</span>
           </div>
           <div class="card-body" style="padding:12px;height:calc(100% - 42px)">
-            <div class="bim-canvas" style="height:100%;position:relative;background:#0a0c10">
+            <div class="bim-canvas" style="height:100%;position:relative;background:#e8ecf0">
               <img src="Clash.jpeg" alt="Clash View"
                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.95;z-index:0;">
               <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -527,7 +527,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
               <div style="position:absolute;top:8px;right:8px;width:14px;height:14px;border-top:2px solid rgba(245,158,11,.7);border-right:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
               <div style="position:absolute;bottom:8px;left:8px;width:14px;height:14px;border-bottom:2px solid rgba(245,158,11,.7);border-left:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
               <div style="position:absolute;bottom:8px;right:8px;width:14px;height:14px;border-bottom:2px solid rgba(245,158,11,.7);border-right:2px solid rgba(245,158,11,.7);z-index:3;pointer-events:none"></div>
-              <div id="clashInfo" style="position:absolute;bottom:12px;left:12px;right:12px;background:rgba(13,15,17,.92);border:1px solid var(--border);border-radius:6px;padding:12px;display:none;z-index:4">
+              <div id="clashInfo" style="position:absolute;bottom:12px;left:12px;right:12px;background:rgba(255,255,255,.92);border:1px solid var(--border);border-radius:6px;padding:12px;display:none;z-index:4">
                 <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px">CLASH DETAIL</div>
                 <div id="clashDetailText" style="font-size:13px;color:var(--text)"></div>
                 <div id="clashDetailSub" style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px"></div>
@@ -550,19 +550,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
           <div class="card" style="flex:1">
             <div class="card-header"><span class="card-title">BIM vs Point Cloud — Level 08</span><span class="chip">DRAG TO COMPARE</span></div>
             <div class="card-body" style="padding:12px">
-              <div class="compare-wrap" id="compareWrap" style="height:300px">
-                <div class="compare-before" style="background:#0a0c10;display:flex;align-items:center;justify-content:center">
-                  <canvas id="bimCompCanvas" style="width:100%;height:100%;position:absolute;inset:0"></canvas>
+              <div class="compare-wrap" id="compareWrap" style="height:340px">
+                <!-- LEFT: BIM side — image + cyan planned column overlays -->
+                <div class="compare-before" style="background:#e8ecf0;position:absolute;inset:0">
+                  <img src="ASBUILT_IMAGE.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center">
+                  <!-- BIM overlay: planned column positions in cyan, slight blue tint -->
+                  <div style="position:absolute;inset:0;background:rgba(8,145,178,0.08)"></div>
+                  <canvas id="bimCompCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:2"></canvas>
+                  <div style="position:absolute;top:8px;left:10px;font-family:var(--mono);font-size:9px;color:#0891b2;background:rgba(255,255,255,.88);padding:2px 8px;border-radius:2px;z-index:3;border:1px solid rgba(8,145,178,.3)">BIM — DESIGN INTENT</div>
                 </div>
-                <div class="compare-after" id="compareAfter" style="background:#0a0c10;display:flex;align-items:center;justify-content:center">
-                  <canvas id="scanCompCanvas" style="width:100%;height:100%;position:absolute;inset:0"></canvas>
+                <!-- RIGHT: Site scan — same image + amber deviation markers -->
+                <div class="compare-after" id="compareAfter" style="position:absolute;inset:0;clip-path:inset(0 50% 0 0)">
+                  <img src="ASBUILT_IMAGE.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center">
+                  <!-- Scan overlay: slight warm tint -->
+                  <div style="position:absolute;inset:0;background:rgba(217,119,6,0.06)"></div>
+                  <canvas id="scanCompCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:2"></canvas>
+                  <div style="position:absolute;top:8px;right:10px;font-family:var(--mono);font-size:9px;color:#d97706;background:rgba(255,255,255,.88);padding:2px 8px;border-radius:2px;z-index:3;border:1px solid rgba(217,119,6,.3)">SITE SCAN — AS BUILT</div>
                 </div>
                 <div class="compare-divider" id="compareDivider"></div>
                 <div class="compare-handle" id="compareHandle">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0d0f11" stroke-width="3"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>
                 </div>
-                <div class="compare-label" style="left:10px;color:var(--cyan)">BIM MODEL</div>
-                <div class="compare-label" style="right:10px;color:var(--amber)">SITE SCAN</div>
               </div>
             </div>
           </div>
@@ -921,13 +929,13 @@ setInterval(updateClock,1000); updateClock();
     const hasPhoto = siteImg.complete && siteImg.naturalWidth > 0 && siteImg.getAttribute('src') !== '';
     if(hasPhoto){
       ctx.clearRect(0,0,w,h);
-      ctx.fillStyle='rgba(4,6,14,0.38)'; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle='rgba(240,242,245,0.38)'; ctx.fillRect(0,0,w,h);
     } else {
-      ctx.fillStyle='#060810'; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle='#edf0f4'; ctx.fillRect(0,0,w,h);
     }
 
     // Grid
-    ctx.strokeStyle='rgba(34,211,238,0.06)';ctx.lineWidth=.5;
+    ctx.strokeStyle='rgba(8,145,178,.1)';ctx.lineWidth=.5;
     for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
     for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
 
@@ -994,7 +1002,7 @@ setInterval(updateClock,1000); updateClock();
     ctx.clearRect(0,0,W,H);
 
     // Subtle cyan grid overlay only
-    ctx.strokeStyle='rgba(34,211,238,.06)';ctx.lineWidth=.5;
+    ctx.strokeStyle='rgba(8,145,178,.1)';ctx.lineWidth=.5;
     for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
     for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
 
@@ -1074,8 +1082,8 @@ setInterval(updateClock,1000); updateClock();
   function draw() {
     const W=canvas.width, H=canvas.height;
     ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='#090b0e'; ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle='rgba(34,211,238,.04)';ctx.lineWidth=.5;
+    ctx.fillStyle='#edf0f4'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(8,145,178,.08)';ctx.lineWidth=.5;
     for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
     for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
 
@@ -1134,38 +1142,131 @@ setInterval(updateClock,1000); updateClock();
 
 // BIM COMPARE CANVASES
 function buildAsBuiltCompare() {
-  function drawBIM(canvas, mode) {
-    canvas.width = canvas.offsetWidth||600; canvas.height = canvas.offsetHeight||300;
+
+  // Draw BIM overlay (left) — planned column positions as cyan dashed outlines
+  function drawBIMOverlay(canvas) {
+    canvas.width = canvas.offsetWidth||600;
+    canvas.height = canvas.offsetHeight||340;
     const ctx = canvas.getContext('2d'), W=canvas.width, H=canvas.height;
-    ctx.fillStyle='#090b0e'; ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle=mode==='scan'?'rgba(245,158,11,.15)':'rgba(34,211,238,.15)';
-    ctx.lineWidth=.5;
-    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
-    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
-    const ox=W*.1,oy=H*.85;
-    for(let f=0;f<5;f++){
-      const fy=oy-f*H*.15;
-      const fc=mode==='scan'?'rgba(245,158,11,.1)':'rgba(34,211,238,.08)';
-      const tc=mode==='scan'?'rgba(245,158,11,.18)':'rgba(34,211,238,.14)';
-      ctx.strokeStyle=mode==='scan'?'rgba(245,158,11,.3)':'rgba(34,211,238,.25)';
-      ctx.lineWidth=.5;
-      const bw=W*.7, bd=W*.2;
-      // Front
-      ctx.fillStyle=fc; ctx.strokeStyle=mode==='scan'?'rgba(245,158,11,.3)':'rgba(34,211,238,.25)';
-      ctx.beginPath();ctx.rect(ox,fy-H*.12,bw,H*.12);ctx.fill();ctx.stroke();
-      if(mode==='scan'&&f===2){
-        ctx.strokeStyle='rgba(239,68,68,.8)'; ctx.lineWidth=1.5;
-        ctx.strokeRect(ox+bw*.4,fy-H*.12-2,bw*.18,H*.12+4);
-      }
-    }
-    ctx.fillStyle=mode==='scan'?'rgba(245,158,11,.5)':'rgba(34,211,238,.5)';
-    ctx.font='9px Space Mono,monospace';
-    ctx.fillText(mode==='scan'?'POINT CLOUD · 2024-05-12':'IFC MODEL · REV 14', 10, H-10);
+    ctx.clearRect(0,0,W,H);
+
+    // Cyan grid overlay
+    ctx.strokeStyle='rgba(8,145,178,.12)'; ctx.lineWidth=.5;
+    for(let x=0;x<W;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+    for(let y=0;y<H;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+    // Planned column positions (design intent) — cyan dashed rectangles
+    const cols = [
+      {x:0.28, y:0.18, w:0.045, h:0.72},  // Left CLT column
+      {x:0.50, y:0.18, w:0.045, h:0.72},  // Centre CLT column
+      {x:0.70, y:0.18, w:0.04,  h:0.72},  // Right CLT column
+    ];
+    ctx.strokeStyle='rgba(8,145,178,.9)';
+    ctx.lineWidth=2;
+    ctx.setLineDash([6,4]);
+    cols.forEach(col=>{
+      ctx.strokeRect(col.x*W, col.y*H, col.w*W, col.h*H);
+      // Fill with light cyan
+      ctx.fillStyle='rgba(8,145,178,.08)';
+      ctx.fillRect(col.x*W, col.y*H, col.w*W, col.h*H);
+    });
+    ctx.setLineDash([]);
+
+    // Label: "DESIGN POSITION"
+    ctx.fillStyle='rgba(8,145,178,.95)';
+    ctx.font='bold 9px Space Mono,monospace';
+    cols.forEach(col=>{
+      ctx.fillText('PLAN', col.x*W+4, col.y*H-4);
+    });
+
+    // Corner brackets
+    ctx.strokeStyle='rgba(8,145,178,.6)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+    [[8,8,'tl'],[W-8,8,'tr'],[8,H-8,'bl'],[W-8,H-8,'br']].forEach(([cx,cy,p])=>{
+      const dx=p.includes('r')?-14:14, dy=p.includes('b')?-14:14;
+      ctx.beginPath(); ctx.moveTo(cx+dx,cy); ctx.lineTo(cx,cy); ctx.lineTo(cx,cy+dy); ctx.stroke();
+    });
   }
+
+  // Draw scan overlay (right) — actual column positions with deviation callouts
+  function drawScanOverlay(canvas) {
+    canvas.width = canvas.offsetWidth||600;
+    canvas.height = canvas.offsetHeight||340;
+    const ctx = canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    // Amber grid overlay
+    ctx.strokeStyle='rgba(217,119,6,.1)'; ctx.lineWidth=.5;
+    for(let x=0;x<W;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+    for(let y=0;y<H;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+    // Actual scanned positions — shifted from plan
+    const actual = [
+      {x:0.28,  y:0.18, w:0.045, h:0.72, dev:null},         // Left col: conforms
+      {x:0.515, y:0.18, w:0.045, h:0.72, dev:'+38mm E'},     // Centre col: shifted east
+      {x:0.705, y:0.18, w:0.04,  h:0.72, dev:'+22mm E'},     // Right col: slight shift
+    ];
+
+    actual.forEach(col=>{
+      const isDeviated = col.dev !== null;
+      // Solid outline for actual position
+      ctx.strokeStyle = isDeviated ? 'rgba(220,38,38,.9)' : 'rgba(5,150,105,.8)';
+      ctx.lineWidth = isDeviated ? 2 : 1.5;
+      ctx.fillStyle  = isDeviated ? 'rgba(220,38,38,.1)'  : 'rgba(5,150,105,.07)';
+      ctx.beginPath();
+      ctx.rect(col.x*W, col.y*H, col.w*W, col.h*H);
+      ctx.fill(); ctx.stroke();
+
+      if(isDeviated){
+        // Arrow showing deviation direction
+        const cx = (col.x + col.w/2)*W;
+        const cy = col.y*H - 12;
+        ctx.strokeStyle='rgba(220,38,38,.8)'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.moveTo(cx-12,cy); ctx.lineTo(cx+12,cy);
+        ctx.moveTo(cx+6,cy-5); ctx.lineTo(cx+12,cy); ctx.lineTo(cx+6,cy+5);
+        ctx.stroke();
+
+        // Deviation tag
+        const tx = col.x*W + col.w*W + 4;
+        const ty = (col.y + col.h*0.3)*H;
+        ctx.fillStyle='rgba(220,38,38,.95)';
+        ctx.fillRect(tx, ty-10, 52, 15);
+        ctx.fillStyle='#fff';
+        ctx.font='bold 8px Space Mono,monospace';
+        ctx.fillText('⚠ '+col.dev, tx+3, ty+2);
+      } else {
+        ctx.fillStyle='rgba(5,150,105,.9)';
+        ctx.font='bold 8px Space Mono,monospace';
+        ctx.fillText('✓ OK', col.x*W+4, col.y*H-4);
+      }
+    });
+
+    // Planned positions (ghost lines for reference)
+    ctx.strokeStyle='rgba(8,145,178,.35)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    [{x:0.28,y:0.18,w:0.045,h:0.72},{x:0.50,y:0.18,w:0.045,h:0.72},{x:0.70,y:0.18,w:0.04,h:0.72}]
+      .forEach(c=>ctx.strokeRect(c.x*W,c.y*H,c.w*W,c.h*H));
+    ctx.setLineDash([]);
+
+    // Corner brackets
+    ctx.strokeStyle='rgba(217,119,6,.6)'; ctx.lineWidth=1.5;
+    [[8,8,'tl'],[W-8,8,'tr'],[8,H-8,'bl'],[W-8,H-8,'br']].forEach(([cx,cy,p])=>{
+      const dx=p.includes('r')?-14:14, dy=p.includes('b')?-14:14;
+      ctx.beginPath(); ctx.moveTo(cx+dx,cy); ctx.lineTo(cx,cy); ctx.lineTo(cx,cy+dy); ctx.stroke();
+    });
+
+    // Legend
+    ctx.fillStyle='rgba(220,38,38,.9)'; ctx.fillRect(10,H-28,10,10);
+    ctx.fillStyle='rgba(5,150,105,.9)'; ctx.fillRect(10,H-14,10,10);
+    ctx.fillStyle='rgba(0,0,0,.7)'; ctx.font='8px Space Mono,monospace';
+    ctx.fillText('Deviation detected',24,H-20);
+    ctx.fillText('Conforms to BIM',24,H-6);
+  }
+
   setTimeout(()=>{
-    drawBIM(document.getElementById('bimCompCanvas'),'bim');
-    drawBIM(document.getElementById('scanCompCanvas'),'scan');
-  },200);
+    const bimC = document.getElementById('bimCompCanvas');
+    const scanC = document.getElementById('scanCompCanvas');
+    if(bimC) drawBIMOverlay(bimC);
+    if(scanC) drawScanOverlay(scanC);
+  }, 200);
 
   // Compare slider
   const wrap = document.getElementById('compareWrap');
@@ -1314,13 +1415,13 @@ function buildTrendChart() {
   drawLine(noise,100,'#10b981');
   drawLine(dust,100,'#ef4444');
   drawLine(co2,1000,'#22d3ee');
-  ctx.fillStyle='rgba(255,255,255,.25)'; ctx.font='8px Space Mono,monospace';
+  ctx.fillStyle='rgba(0,0,0,.4)'; ctx.font='8px Space Mono,monospace';
   hours.forEach((h,i)=>{
     const x=i*(W-40)/(hours.length-1)+20;
     ctx.fillText(h,x-8,H-1);
   });
   [['Noise',4,'#10b981'],['PM2.5',60,'#ef4444'],['CO₂',116,'#22d3ee']].forEach(([l,lx,c])=>{
-    ctx.fillStyle=c; ctx.fillRect(lx,2,12,3); ctx.fillStyle='rgba(255,255,255,.4)';
+    ctx.fillStyle=c; ctx.fillRect(lx,2,12,3); ctx.fillStyle='rgba(0,0,0,.5)';
     ctx.fillText(l,lx+14,9);
   });
 }
