@@ -317,6 +317,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
       Site Conditions
     </div>
+    <div class="nav-item" data-page="building" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"/></svg>
+      Building Registry
+    </div>
+    <div class="nav-item" data-page="assistant" onclick="nav(this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
+      AI Assistant
+    </div>
   </div>
   <div class="status-bar">
     <div class="status-item"><div class="dot live"></div>3 Robots Online</div>
@@ -856,6 +864,239 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       </div>
     </div>
 
+  </div><!-- #content ends after all pages below -->
+
+    <!-- ==================== BUILDING REGISTRY ==================== -->
+    <div class="page" id="page-building" style="overflow-y:auto;overflow-x:hidden">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;min-width:0">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <!-- Stats -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px">
+            <div class="stat"><div class="stat-label">Total</div><div class="stat-val">36</div><div class="stat-sub">Components</div></div>
+            <div class="stat"><div class="stat-label">Arrived</div><div class="stat-val" style="color:var(--cyan)">27</div><div class="stat-sub">On site</div></div>
+            <div class="stat"><div class="stat-label">Installed</div><div class="stat-val" style="color:var(--amber)">22</div><div class="stat-sub">In place</div></div>
+            <div class="stat"><div class="stat-label">Inspected</div><div class="stat-val" style="color:var(--green)">19</div><div class="stat-sub">Robot scanned</div></div>
+            <div class="stat"><div class="stat-label">Approved</div><div class="stat-val" style="color:var(--green)">17</div><div class="stat-sub">Sign-off done</div></div>
+          </div>
+          <!-- Search -->
+          <div style="display:flex;gap:10px">
+            <input id="regSearch" type="text" placeholder="Search RFID, name, floor or employee..." oninput="doFilter()" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--text);font-size:12px;outline:none">
+            <select id="regFilter" onchange="doFilter()" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--text);font-size:12px;outline:none">
+              <option value="all">All Status</option>
+              <option value="approved">Approved</option>
+              <option value="inspected">Inspected</option>
+              <option value="installed">Installed</option>
+              <option value="arrived">On Site</option>
+              <option value="pending">Pending</option>
+            </select>
+            <select id="regCat" onchange="doFilter()" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--text);font-size:12px;outline:none">
+              <option value="all">All Types</option>
+              <option value="Structural">Structural</option>
+              <option value="MEP">MEP</option>
+              <option value="Envelope">Envelope</option>
+              <option value="Finishes">Finishes</option>
+              <option value="Mechanical">Mechanical</option>
+            </select>
+          </div>
+          <!-- Table -->
+          <div class="card" style="overflow:hidden">
+            <div class="card-header"><span class="card-title">Component Registry</span><span class="chip" id="regCount">36 items</span></div>
+            <div style="overflow-y:auto;max-height:55vh">
+              <table style="width:100%;border-collapse:collapse;font-size:11px">
+                <thead style="position:sticky;top:0;background:var(--panel)">
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <th style="padding:8px 12px;text-align:left;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400;letter-spacing:1px">RFID</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400;letter-spacing:1px">COMPONENT</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400;letter-spacing:1px">TYPE</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400;letter-spacing:1px">FLOOR</th>
+                    <th style="padding:8px 12px;text-align:center;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400;letter-spacing:1px">INSTALLED</th>
+                    <th style="padding:8px 12px;text-align:center;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400;letter-spacing:1px">INSPECTED</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400;letter-spacing:1px">STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="regBody">
+                  <!-- Rows injected by initRegistry() below -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Detail panel -->
+        <div class="card" style="overflow-y:auto;max-height:calc(100vh - 110px)">
+          <div class="card-header"><span class="card-title">Component Detail</span><span class="chip" id="detailRfid">—</span></div>
+          <div id="detailBody" style="padding:14px;font-size:12px;color:var(--text3);text-align:center;margin-top:30px">
+            Click any row to view full details
+          </div>
+        </div>
+      </div>
+      <!-- Self-contained inline script — runs immediately when parsed -->
+      <script>
+      (function(){
+        var RD=[
+          ['WB-0001','CLT Column C1 Ground','Structural','Floor 01','A2','TimberTech',true,true,'approved','R01','Marco Fischer','2024-04-10','Plumb ±1mm PASS'],
+          ['WB-0002','CLT Column C2 Ground','Structural','Floor 01','B2','TimberTech',true,true,'approved','R01','Marco Fischer','2024-04-10','Dev +2mm within tolerance'],
+          ['WB-0003','CLT Column C3 Ground','Structural','Floor 01','C2','TimberTech',true,true,'approved','R02','Lena Braun','2024-04-11','PASS'],
+          ['WB-0004','Glulam Beam GB-01','Structural','Floor 01','A1-A4','HolzBau AG',true,true,'approved','R02','Lena Braun','2024-04-11','Bearing OK'],
+          ['WB-0005','Glulam Beam GB-02','Structural','Floor 01','B1-B4','HolzBau AG',true,true,'approved','R03','Stefan Koch','2024-04-12','PASS'],
+          ['WB-0006','CLT Floor Slab F01-A','Structural','Floor 01','Zone A','TimberTech',true,true,'approved','R01','Marco Fischer','2024-04-13','Thickness ±1mm PASS'],
+          ['WB-0007','CLT Floor Slab F01-B','Structural','Floor 01','Zone B','TimberTech',true,true,'approved','R01','Marco Fischer','2024-04-13','PASS'],
+          ['WB-0008','HVAC Duct Supply Zone A','MEP','Floor 01','Ceiling A','KlimaTech',true,true,'approved','R02','Anna Weber','2024-04-16','Pressure test passed'],
+          ['WB-0009','Plumbing Riser PR-01','MEP','Floor 01','Core','SanitarPro',true,true,'approved','R01','Thomas Muller','2024-04-15','Leak test passed'],
+          ['WB-0010','Electrical Conduit EC-01','MEP','Floor 01','Main Run','ElektroBau',true,true,'approved','R03','Julia Schneider','2024-04-17','Continuity OK'],
+          ['WB-0011','Curtain Wall CW-01A','Envelope','Floor 01','West','GlasFassade',true,true,'approved','R02','Paul Wagner','2024-04-20','Seal test passed'],
+          ['WB-0012','Curtain Wall CW-01B','Envelope','Floor 01','East','GlasFassade',true,true,'approved','R02','Paul Wagner','2024-04-20','Alignment ±2mm OK'],
+          ['WB-0013','Sprinkler Main Level 1','MEP','Floor 01','Full Floor','FireTech',true,true,'approved','R01','Anna Weber','2024-04-18','Flow rate confirmed'],
+          ['WB-0014','CLT Column C1 First','Structural','Floor 02','A2','TimberTech',true,true,'approved','R01','Marco Fischer','2024-04-24','PASS'],
+          ['WB-0015','CLT Column C2 First','Structural','Floor 02','B2','TimberTech',true,true,'inspected','R02','Lena Braun','2024-04-24','Dev +38mm E flagged'],
+          ['WB-0016','CLT Column C3 First','Structural','Floor 02','C2','TimberTech',true,true,'inspected','R03','Stefan Koch','2024-04-25','Dev +22mm E review'],
+          ['WB-0017','Glulam Beam GB-03','Structural','Floor 02','A1-A4','HolzBau AG',true,true,'approved','R01','Marco Fischer','2024-04-25','PASS'],
+          ['WB-0018','CLT Floor Slab F02-A','Structural','Floor 02','Zone A','TimberTech',true,true,'approved','R02','Lena Braun','2024-04-26','PASS'],
+          ['WB-0019','CLT Floor Slab F02-B','Structural','Floor 02','Zone B','TimberTech',true,true,'approved','R02','Lena Braun','2024-04-26','PASS'],
+          ['WB-0020','HVAC Duct Supply Zone B','MEP','Floor 02','Ceiling B','KlimaTech',true,true,'inspected','R03','Anna Weber','2024-04-29','Awaiting sign-off'],
+          ['WB-0021','Plumbing Riser PR-02','MEP','Floor 02','Core','SanitarPro',true,false,'installed','—','Thomas Muller','—','Pressure test pending'],
+          ['WB-0022','Electrical Conduit EC-02','MEP','Floor 02','Main Run','ElektroBau',true,false,'installed','—','Julia Schneider','—','Not yet scanned'],
+          ['WB-0023','Curtain Wall CW-02A','Envelope','Floor 02','West','GlasFassade',false,false,'arrived','—','—','—','Staging area B'],
+          ['WB-0024','Curtain Wall CW-02B','Envelope','Floor 02','East','GlasFassade',false,false,'arrived','—','—','—','Staging area B'],
+          ['WB-0025','Sprinkler Main Level 2','MEP','Floor 02','Full Floor','FireTech',false,false,'arrived','—','—','—','Awaiting installation'],
+          ['WB-0026','Steel Bracket SB-02A','Structural','Floor 02','A-B','MetallBau',true,true,'approved','R01','Stefan Koch','2024-04-27','PASS'],
+          ['WB-0027','Access Door AD-02','Finishes','Floor 02','Core East','TurWerk',true,false,'installed','—','Marco Fischer','—','Awaiting inspection'],
+          ['WB-0028','CLT Column C1 Second','Structural','Floor 03','A2','TimberTech',false,false,'pending','—','—','—','Not yet delivered'],
+          ['WB-0029','CLT Column C2 Second','Structural','Floor 03','B2','TimberTech',false,false,'pending','—','—','—','Scheduled May 10'],
+          ['WB-0030','CLT Column C3 Second','Structural','Floor 03','C2','TimberTech',false,false,'pending','—','—','—','Scheduled May 10'],
+          ['WB-0031','Glulam Beam GB-05','Structural','Floor 03','A1-A4','HolzBau AG',false,false,'pending','—','—','—','Scheduled May 12'],
+          ['WB-0032','CLT Floor Slab F03-A','Structural','Floor 03','Zone A','TimberTech',false,false,'arrived','—','—','—','Delivered early'],
+          ['WB-0033','HVAC Duct Zone C','MEP','Floor 03','Ceiling','KlimaTech',false,false,'pending','—','—','—','Scheduled May 20'],
+          ['WB-0034','Roof CLT Panel R01','Structural','Roof','Zone A','TimberTech',false,false,'pending','—','—','—','June delivery'],
+          ['WB-0035','Roof Membrane RM-01','Envelope','Roof','Full Roof','DachPro',false,false,'pending','—','—','—','Post structural'],
+          ['WB-0036','Lift Equipment','Mechanical','Core','Shaft','AufzugTech',false,false,'pending','—','—','—','Long-lead 12 wks'],
+        ];
+        var SC={
+          approved:{label:'APPROVED',bg:'#d1fae5',color:'#059669'},
+          inspected:{label:'INSPECTED',bg:'#dbeafe',color:'#1d4ed8'},
+          installed:{label:'INSTALLED',bg:'#fef3c7',color:'#d97706'},
+          arrived:{label:'ON SITE',bg:'#ede9fe',color:'#6d28d9'},
+          pending:{label:'PENDING',bg:'#f3f4f6',color:'#6b7280'}
+        };
+        var TC={Structural:'#0891b2',MEP:'#d97706',Envelope:'#7c3aed',Finishes:'#059669',Mechanical:'#dc2626'};
+
+        function renderRows(data){
+          var tb=document.getElementById('regBody');
+          var ct=document.getElementById('regCount');
+          if(!tb) return;
+          if(ct) ct.textContent=data.length+' items';
+          tb.innerHTML='';
+          data.forEach(function(r,i){
+            var s=SC[r[8]]||SC.pending;
+            var tc=TC[r[2]]||'#888';
+            var tr=document.createElement('tr');
+            tr.style.borderBottom='1px solid #e2e6ed';
+            tr.style.cursor='pointer';
+            tr.onmouseover=function(){tr.style.background='#f7f8fa'};
+            tr.onmouseout=function(){tr.style.background=''};
+            tr.onclick=function(){showDet(r);};
+            tr.innerHTML=
+              '<td style="padding:8px 12px;font-family:monospace;font-size:10px;color:#d97706;font-weight:700">'+r[0]+'</td>'+
+              '<td style="padding:8px 12px;font-size:11px;color:#111827;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px">'+r[1]+'</td>'+
+              '<td style="padding:8px 12px"><span style="font-size:9px;font-family:monospace;color:'+tc+';border:1px solid '+tc+';padding:2px 6px;border-radius:3px">'+r[2]+'</span></td>'+
+              '<td style="padding:8px 12px;font-size:10px;color:#374151;font-family:monospace">'+r[3]+'</td>'+
+              '<td style="padding:8px 12px;text-align:center;font-size:14px;color:'+(r[6]?'#059669':'#9ca3af')+'">'+(r[6]?'✓':'–')+'</td>'+
+              '<td style="padding:8px 12px;text-align:center;font-size:14px;color:'+(r[7]?'#059669':'#9ca3af')+'">'+(r[7]?'✓':'–')+'</td>'+
+              '<td style="padding:8px 12px"><span style="font-size:9px;font-family:monospace;color:'+s.color+';background:'+s.bg+';padding:2px 7px;border-radius:3px;font-weight:700">'+s.label+'</span></td>';
+            tb.appendChild(tr);
+          });
+        }
+
+        function showDet(r){
+          var s=SC[r[8]]||SC.pending;
+          var rfEl=document.getElementById('detailRfid');
+          var dbEl=document.getElementById('detailBody');
+          if(rfEl) rfEl.textContent=r[0];
+          if(!dbEl) return;
+          var fields=[['Component',r[1]],['Type',r[2]],['Floor',r[3]],['Grid',r[4]],['Supplier',r[5]],
+            ['Installed',r[6]?'Yes':'No'],['Inspected',r[7]?'Yes':'No'],
+            ['Robot',r[9]],['Employee',r[10]],['Scan Date',r[11]],['Notes',r[12]]];
+          dbEl.innerHTML='<div style="margin-bottom:12px"><div style="font-size:13px;font-weight:600;color:#111827;margin-bottom:6px">'+r[1]+'</div>'+
+            '<span style="font-size:9px;font-family:monospace;color:'+s.color+';background:'+s.bg+';padding:3px 8px;border-radius:3px;font-weight:700">'+s.label+'</span></div>'+
+            fields.map(function(f){return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #e2e6ed"><span style="font-size:10px;font-family:monospace;color:#9ca3af">'+f[0].toUpperCase()+'</span><span style="font-size:11px;color:#111827;text-align:right;max-width:60%">'+f[1]+'</span></div>';}).join('')+
+            '<button onclick="askAbout(\''+r[0]+'\',\''+r[1]+'\',\''+r[10]+'\')" style="width:100%;margin-top:12px;padding:9px;background:#d97706;color:#fff;border:none;border-radius:6px;font-family:monospace;font-size:10px;font-weight:700;cursor:pointer">ASK AI ABOUT THIS &rarr;</button>';
+        }
+
+        window.doFilter=function(){
+          var q=(document.getElementById('regSearch')||{}).value||'';
+          var sf=(document.getElementById('regFilter')||{}).value||'all';
+          var cf=(document.getElementById('regCat')||{}).value||'all';
+          q=q.toLowerCase();
+          var filtered=RD.filter(function(r){
+            return (sf==='all'||r[8]===sf)&&(cf==='all'||r[2]===cf)&&
+              (!q||(r[0]+r[1]+r[3]+r[10]).toLowerCase().indexOf(q)>=0);
+          });
+          renderRows(filtered);
+        };
+
+        // Store for AI access
+        window.regData=RD;
+        window.showRegDetail=showDet;
+
+        // Render immediately
+        renderRows(RD);
+      })();
+      </script>
+    </div>
+
+    <!-- ==================== AI ASSISTANT ==================== -->
+    <div class="page" id="page-assistant" style="overflow:hidden;padding:0">
+      <div style="display:grid;grid-template-columns:280px 1fr;height:calc(100vh - 50px);gap:0">
+        <!-- Left: quick lookups -->
+        <div style="background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden">
+          <div style="padding:16px;border-bottom:1px solid var(--border)">
+            <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px">Quick Queries</div>
+            <div id="quickBtns" style="display:flex;flex-direction:column;gap:6px"></div>
+          </div>
+          <div style="padding:16px;flex:1;overflow-y:auto">
+            <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px">Recent Components</div>
+            <div id="recentComponents" style="display:flex;flex-direction:column;gap:5px"></div>
+          </div>
+        </div>
+        <!-- Right: chat -->
+        <div style="display:flex;flex-direction:column;height:100%;overflow:hidden;padding:0">
+          <!-- Chat header -->
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--surface);flex-shrink:0">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+            </div>
+            <div>
+              <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text)">Site Intelligence Assistant</div>
+              <div style="font-size:10px;color:var(--text3)">Ask about any building component, robot scan, employee or inspection</div>
+            </div>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+              <div class="dot live"></div>
+              <span style="font-size:10px;font-family:var(--mono);color:var(--green)">ONLINE</span>
+            </div>
+          </div>
+          <!-- Messages -->
+          <div id="chatMessages" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--bg)">
+            <!-- Welcome -->
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+                <svg width="13" height="13" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+              </div>
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:0 12px 12px 12px;padding:12px 14px;max-width:80%">
+                <div style="font-size:12px;color:var(--text);line-height:1.6">Hello! I'm your Site Intelligence Assistant for <strong>University Building — Weimar</strong>. I have full access to component records, robot scans, inspection reports, and employee logs.<br><br>You can ask me things like:<br>• <em>"Show me details for CLT column C2"</em><br>• <em>"Which robot scanned the second floor beams?"</em><br>• <em>"Who installed the HVAC ductwork on Floor 2?"</em><br>• <em>"What is the inspection status of RFID WB-0047?"</em></div>
+              </div>
+            </div>
+          </div>
+          <!-- Input -->
+          <div style="padding:14px 20px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0">
+            <div style="display:flex;gap:10px;align-items:flex-end">
+              <textarea id="chatInput" placeholder="Ask about a component, RFID, robot, employee or inspection..." rows="2" style="flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--panel);color:var(--text);font-family:var(--sans);font-size:13px;resize:none;outline:none;line-height:1.5" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+              <button onclick="sendChat()" id="sendBtn" style="padding:10px 18px;background:var(--amber);color:#fff;border:none;border-radius:8px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px;height:44px;flex-shrink:0">SEND</button>
+            </div>
+            <div style="font-size:10px;color:var(--text3);margin-top:6px;font-family:var(--mono)">Powered by Claude AI · All component data from University Building — Weimar project</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- #content -->
 </div><!-- #main -->
 
@@ -874,7 +1115,9 @@ function nav(el) {
     'asbuilt':'AS BUILT UPDATE',
     'progress':'PROGRESS TRACKING',
     'vehicles':'VEHICLE SCHEDULES',
-    'conditions':'SITE CONDITIONS'
+    'conditions':'SITE CONDITIONS',
+    'building':'BUILDING REGISTRY',
+    'assistant':'AI ASSISTANT'
   };
   document.getElementById('page-title').textContent = titles[page] || page.toUpperCase();
   // Re-render deferred content when switching pages
@@ -1462,6 +1705,252 @@ document.addEventListener('DOMContentLoaded', function() {
   // Start immediately — script is at bottom of body so DOM is ready
   setTimeout(animateSensors, 100);
 })();
+
+// ==================== BUILDING REGISTRY ====================
+const registryData = [
+  // [rfid, name, type, floor, grid, supplier, installed, inspected, status, robot, employee, scanDate, notes]
+  ['WB-0001','CLT Column C1 — Ground','Structural','Floor 01','Grid A2','TimberTech GmbH',true,true,'approved','R01','Marco Fischer','2024-04-10','Plumb ±1mm — PASS'],
+  ['WB-0002','CLT Column C2 — Ground','Structural','Floor 01','Grid B2','TimberTech GmbH',true,true,'approved','R01','Marco Fischer','2024-04-10','Deviation +2mm E — within tolerance'],
+  ['WB-0003','CLT Column C3 — Ground','Structural','Floor 01','Grid C2','TimberTech GmbH',true,true,'approved','R02','Lena Braun','2024-04-11','PASS'],
+  ['WB-0004','Glulam Beam GB-01','Structural','Floor 01','Grid A1–A4','HolzBau AG',true,true,'approved','R02','Lena Braun','2024-04-11','Bearing OK'],
+  ['WB-0005','Glulam Beam GB-02','Structural','Floor 01','Grid B1–B4','HolzBau AG',true,true,'approved','R03','Stefan Koch','2024-04-12','PASS'],
+  ['WB-0006','CLT Floor Slab F01-A','Structural','Floor 01','Zone A','TimberTech GmbH',true,true,'approved','R01','Marco Fischer','2024-04-13','Thickness ±1mm PASS'],
+  ['WB-0007','CLT Floor Slab F01-B','Structural','Floor 01','Zone B','TimberTech GmbH',true,true,'approved','R01','Marco Fischer','2024-04-13','PASS'],
+  ['WB-0008','HVAC Duct — Supply Zone A','MEP','Floor 01','Ceiling Zone A','KlimaTech GmbH',true,true,'approved','R02','Anna Weber','2024-04-16','Pressure test passed'],
+  ['WB-0009','Plumbing Riser PR-01','MEP','Floor 01','Core','SanitärPro',true,true,'approved','R01','Thomas Müller','2024-04-15','Leak test passed'],
+  ['WB-0010','Electrical Conduit EC-01','MEP','Floor 01','Main Run','ElektroBau',true,true,'approved','R03','Julia Schneider','2024-04-17','Continuity OK'],
+  ['WB-0011','Curtain Wall CW-01A','Envelope','Floor 01','Grid A–C West','GlasFassade GmbH',true,true,'approved','R02','Paul Wagner','2024-04-20','Seal test passed'],
+  ['WB-0012','Curtain Wall CW-01B','Envelope','Floor 01','Grid A–C East','GlasFassade GmbH',true,true,'approved','R02','Paul Wagner','2024-04-20','Alignment ±2mm OK'],
+  ['WB-0013','Sprinkler Main — Level 1','MEP','Floor 01','Full Floor','FireTech',true,true,'approved','R01','Anna Weber','2024-04-18','Flow rate confirmed'],
+  ['WB-0014','CLT Column C1 — First','Structural','Floor 02','Grid A2','TimberTech GmbH',true,true,'approved','R01','Marco Fischer','2024-04-24','PASS'],
+  ['WB-0015','CLT Column C2 — First','Structural','Floor 02','Grid B2','TimberTech GmbH',true,true,'approved','R02','Lena Braun','2024-04-24','Dev +38mm E — flagged'],
+  ['WB-0016','CLT Column C3 — First','Structural','Floor 02','Grid C2','TimberTech GmbH',true,true,'approved','R03','Stefan Koch','2024-04-25','Dev +22mm E — review'],
+  ['WB-0017','Glulam Beam GB-03','Structural','Floor 02','Grid A1–A4','HolzBau AG',true,true,'approved','R01','Marco Fischer','2024-04-25','PASS'],
+  ['WB-0018','CLT Floor Slab F02-A','Structural','Floor 02','Zone A','TimberTech GmbH',true,true,'approved','R02','Lena Braun','2024-04-26','PASS'],
+  ['WB-0019','CLT Floor Slab F02-B','Structural','Floor 02','Zone B','TimberTech GmbH',true,true,'approved','R02','Lena Braun','2024-04-26','PASS'],
+  ['WB-0020','HVAC Duct — Supply Zone B','MEP','Floor 02','Ceiling Zone B','KlimaTech GmbH',true,true,'inspected','R03','Anna Weber','2024-04-29','Awaiting sign-off'],
+  ['WB-0021','Plumbing Riser PR-02','MEP','Floor 02','Core','SanitärPro',true,false,'installed','—','Thomas Müller','—','Pressure test pending'],
+  ['WB-0022','Electrical Conduit EC-02','MEP','Floor 02','Main Run','ElektroBau',true,false,'installed','—','Julia Schneider','—','Not yet scanned'],
+  ['WB-0023','Curtain Wall CW-02A','Envelope','Floor 02','West Face','GlasFassade GmbH',false,false,'arrived','—','—','—','In staging area B'],
+  ['WB-0024','Curtain Wall CW-02B','Envelope','Floor 02','East Face','GlasFassade GmbH',false,false,'arrived','—','—','—','In staging area B'],
+  ['WB-0025','Sprinkler Main — Level 2','MEP','Floor 02','Full Floor','FireTech',false,false,'arrived','—','—','—','Awaiting installation'],
+  ['WB-0026','Steel Bracket SB-02A','Structural','Floor 02','Grid A–B','MetallBau',true,true,'approved','R01','Stefan Koch','2024-04-27','PASS'],
+  ['WB-0027','Access Door AD-02','Finishes','Floor 02','Core East','TürWerk GmbH',true,false,'installed','—','Marco Fischer','—','Awaiting inspection'],
+  ['WB-0028','CLT Column C1 — Second','Structural','Floor 03','Grid A2','TimberTech GmbH',false,false,'pending','—','—','—','Not yet delivered'],
+  ['WB-0029','CLT Column C2 — Second','Structural','Floor 03','Grid B2','TimberTech GmbH',false,false,'pending','—','—','—','Scheduled May 10'],
+  ['WB-0030','CLT Column C3 — Second','Structural','Floor 03','Grid C2','TimberTech GmbH',false,false,'pending','—','—','—','Scheduled May 10'],
+  ['WB-0031','Glulam Beam GB-05','Structural','Floor 03','Grid A1–A4','HolzBau AG',false,false,'pending','—','—','—','Scheduled May 12'],
+  ['WB-0032','CLT Floor Slab F03-A','Structural','Floor 03','Zone A','TimberTech GmbH',false,false,'arrived','—','—','—','Delivered early'],
+  ['WB-0033','HVAC Duct — Zone C','MEP','Floor 03','Ceiling','KlimaTech GmbH',false,false,'pending','—','—','—','Scheduled May 20'],
+  ['WB-0034','Roof CLT Panel R01','Structural','Roof','Zone A','TimberTech GmbH',false,false,'pending','—','—','—','June delivery'],
+  ['WB-0035','Roof Membrane RM-01','Envelope','Roof','Full Roof','DachPro',false,false,'pending','—','—','—','Post structural'],
+  ['WB-0036','Lift Equipment — Main Car','Mechanical','Core','Shaft','AufzugTech',false,false,'pending','—','—','—','Long-lead 12 wks'],
+];
+
+const statusCfg = {
+  'approved': {label:'APPROVED', bg:'var(--green-dim)', color:'var(--green)', dot:'#059669'},
+  'inspected':{label:'INSPECTED',bg:'#dbeafe',         color:'#1d4ed8',     dot:'#3b82f6'},
+  'installed': {label:'INSTALLED',bg:'var(--amber-dim)', color:'var(--amber)', dot:'#d97706'},
+  'arrived':  {label:'ON SITE',  bg:'#ede9fe',          color:'#6d28d9',     dot:'#7c3aed'},
+  'pending':  {label:'PENDING',  bg:'var(--panel)',      color:'var(--text3)', dot:'#9ca3af'},
+};
+const typeCfg = {
+  'Structural':'#0891b2','MEP':'#d97706','Envelope':'#7c3aed','Finishes':'#059669','Mechanical':'#dc2626'
+};
+
+function buildRegistry() {
+  // Reset filters to show all on first load
+  const sf = document.getElementById('regFilter');
+  const sc = document.getElementById('regCat');
+  if(sf && !sf.dataset.init) { sf.value='all'; sf.dataset.init='1'; }
+  if(sc && !sc.dataset.init) { sc.value='all'; sc.dataset.init='1'; }
+  renderRegistry(registryData);
+  // Quick filter buttons
+  const qb = document.getElementById('quickBtns');
+  if(qb && !qb.dataset.built) {
+    qb.dataset.built='1';
+    ['approved','inspected','installed','arrived','pending'].forEach(s=>{
+      const sc = statusCfg[s];
+      const btn = document.createElement('button');
+      btn.style.cssText=`display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--text2);cursor:pointer;font-family:var(--mono);font-size:10px;text-align:left;width:100%`;
+      btn.innerHTML=`<span style="width:8px;height:8px;border-radius:50%;background:${sc.dot};display:inline-block;flex-shrink:0"></span>${sc.label} (${registryData.filter(r=>r[8]===s).length})`;
+      btn.onclick=()=>{document.getElementById('regFilter').value=s;filterRegistry();};
+      qb.appendChild(btn);
+    });
+  }
+  // Recent
+  const rc = document.getElementById('recentComponents');
+  if(rc && !rc.dataset.built) {
+    rc.dataset.built='1';
+    registryData.filter(r=>r[7]).slice(0,8).forEach(r=>{
+      const d=document.createElement('div');
+      d.style.cssText='padding:6px 8px;border-radius:5px;cursor:pointer;border:1px solid var(--border);background:var(--panel);margin-bottom:4px';
+      d.innerHTML=`<div style="font-family:var(--mono);font-size:9px;color:var(--amber)">${r[0]}</div><div style="font-size:11px;color:var(--text);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r[1]}</div>`;
+      d.onclick=()=>showDetail(r);
+      rc.appendChild(d);
+    });
+  }
+}
+
+function renderRegistry(data) {
+  const body = document.getElementById('regBody');
+  const count = document.getElementById('regCount');
+  if(!body) return;
+  if(count) count.textContent = data.length + ' items';
+  const rows = data.map((r,i) => {
+    const sc = statusCfg[r[8]] || statusCfg['pending'];
+    const tc = typeCfg[r[2]] || '#888780';
+    const idx = registryData.indexOf(r);
+    const tr = document.createElement('tr');
+    tr.dataset.idx = idx;
+    tr.style.cssText = 'border-bottom:1px solid var(--border);cursor:pointer';
+    tr.innerHTML =
+      `<td style="padding:8px 12px;font-family:var(--mono);font-size:10px;color:var(--amber);font-weight:700">${r[0]}</td>` +
+      `<td style="padding:8px 12px;font-size:11px;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px">${r[1]}</td>` +
+      `<td style="padding:8px 12px"><span style="font-size:9px;font-family:var(--mono);color:${tc};padding:2px 6px;border-radius:3px;border:1px solid ${tc}">${r[2]}</span></td>` +
+      `<td style="padding:8px 12px;font-size:10px;color:var(--text2);font-family:var(--mono)">${r[3]}</td>` +
+      `<td style="padding:8px 12px;text-align:center;color:${r[6]?'var(--green)':'var(--text3)'}">${r[6]?'✓':'–'}</td>` +
+      `<td style="padding:8px 12px;text-align:center;color:${r[7]?'var(--green)':'var(--text3)'}">${r[7]?'✓':'–'}</td>` +
+      `<td style="padding:8px 12px"><span style="font-size:9px;font-family:var(--mono);color:${sc.color};background:${sc.bg};padding:2px 7px;border-radius:3px;font-weight:700">${sc.label}</span></td>`;
+    tr.addEventListener('mouseover',()=>tr.style.background='var(--panel)');
+    tr.addEventListener('mouseout',()=>tr.style.background='');
+    tr.addEventListener('click',()=>showDetail(registryData[parseInt(tr.dataset.idx)]));
+    return tr;
+  });
+  body.innerHTML = '';
+  rows.forEach(r=>body.appendChild(r));
+}
+
+function showDetail(r) {
+  if(!r) return;
+  const sc = statusCfg[r[8]] || statusCfg['pending'];
+  document.getElementById('detailRfid').textContent = r[0];
+  document.getElementById('detailBody').innerHTML = `
+    <div style="margin-bottom:14px">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">${r[1]}</div>
+      <span style="font-size:9px;font-family:var(--mono);color:${sc.color};background:${sc.bg};padding:3px 8px;border-radius:3px;font-weight:700">${sc.label}</span>
+    </div>
+    ${[
+      ['Type',r[2]],['Floor',r[3]],['Grid Ref',r[4]],['Supplier',r[5]],
+      ['Installed',r[6]?'Yes':'No'],['Inspected',r[7]?'Yes':'No'],
+      ['Robot',r[9]],['Employee',r[10]],['Scan Date',r[11]],['Notes',r[12]]
+    ].map(([k,v])=>`
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:10px;font-family:var(--mono);color:var(--text3);letter-spacing:.5px">${k.toUpperCase()}</span>
+        <span style="font-size:11px;color:var(--text);text-align:right;max-width:65%">${v}</span>
+      </div>`).join('')}
+    <button data-rfid="${r[0]}" id="askAiBtn" style="width:100%;margin-top:14px;padding:10px;background:var(--amber);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.5px">ASK AI ABOUT THIS COMPONENT &#8594;</button>`;
+  const askBtn = document.getElementById('askAiBtn');
+  if(askBtn) askBtn.addEventListener('click',()=>askAbout(r[0],r[1],r[10]));
+}
+
+function filterRegistry() {
+  const q = (document.getElementById('regSearch')?.value||'').toLowerCase();
+  const s = document.getElementById('regFilter')?.value||'all';
+  const c = document.getElementById('regCat')?.value||'all';
+  const filtered = registryData.filter(r=>
+    (s==='all'||r[8]===s) &&
+    (c==='all'||r[2]===c) &&
+    (!q||(r[0]+r[1]+r[3]+r[10]).toLowerCase().includes(q))
+  );
+  renderRegistry(filtered);
+}
+
+// ==================== AI ASSISTANT ====================
+const COMPONENT_DB = registryData.reduce((acc,r)=>{acc[r[0]]=r;return acc;},{});
+
+function askAbout(rfid, name, employee) {
+  // Switch to assistant tab
+  document.querySelectorAll('.nav-item').forEach(i=>{
+    if(i.dataset.page==='assistant'){nav(i);}
+  });
+  setTimeout(()=>{
+    const input = document.getElementById('chatInput');
+    if(input) {
+      input.value = `Tell me everything about component ${rfid} — ${name}. Include installation details, who handled it, robot scans and inspection results.`;
+      sendChat();
+    }
+  }, 100);
+}
+
+// Build a context string about all components for the AI
+function buildSiteContext() {
+  return `You are a Site Intelligence Assistant for the University Building — Weimar construction project. 
+You have access to the following building component registry data:
+
+${registryData.map(r=>`RFID: ${r[0]} | Name: ${r[1]} | Type: ${r[2]} | Floor: ${r[3]} | Grid: ${r[4]} | Supplier: ${r[5]} | Installed: ${r[6]?'Yes':'No'} | Inspected: ${r[7]?'Yes':'No'} | Status: ${r[8].toUpperCase()} | Robot: ${r[9]} | Employee: ${r[10]} | Scan Date: ${r[11]} | Notes: ${r[12]}`).join('\n')}
+
+Project details:
+- Project: University Building — Weimar
+- Floors: 3 + Roof
+- Robots on site: R01, R02, R03
+- Key employees: Marco Fischer (Structural lead), Lena Braun (Structural), Stefan Koch (Structural/MEP), Anna Weber (MEP), Thomas Müller (Plumbing), Julia Schneider (Electrical), Paul Wagner (Envelope)
+
+Answer questions about components, RFIDs, employees, robots, inspections and installation status. Be concise and professional. Format your answers clearly using the data above.`;
+}
+
+let chatHistory = [];
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const btn = document.getElementById('sendBtn');
+  const messages = document.getElementById('chatMessages');
+  const text = input.value.trim();
+  if(!text) return;
+
+  // Add user message
+  input.value = '';
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  const userBubble = document.createElement('div');
+  userBubble.style.cssText = 'display:flex;justify-content:flex-end;gap:10px;align-items:flex-start';
+  userBubble.innerHTML = `<div style="background:var(--amber);color:#fff;border-radius:12px 0 12px 12px;padding:10px 14px;max-width:75%;font-size:12px;line-height:1.6">${text}</div>`;
+  messages.appendChild(userBubble);
+  messages.scrollTop = messages.scrollHeight;
+
+  // Thinking bubble
+  const thinkBubble = document.createElement('div');
+  thinkBubble.style.cssText = 'display:flex;gap:10px;align-items:flex-start';
+  thinkBubble.innerHTML = `
+    <div style="width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+      <svg width="13" height="13" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:0 12px 12px 12px;padding:12px 16px;font-size:12px;color:var(--text3);font-family:var(--mono)">Querying site database...</div>`;
+  messages.appendChild(thinkBubble);
+  messages.scrollTop = messages.scrollHeight;
+
+  chatHistory.push({role:'user', content: text});
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system: buildSiteContext(),
+        messages: chatHistory
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Sorry, I could not retrieve that information right now.';
+    chatHistory.push({role:'assistant', content: reply});
+
+    thinkBubble.querySelector('div:last-child').style.color = 'var(--text)';
+    thinkBubble.querySelector('div:last-child').style.fontFamily = 'var(--sans)';
+    thinkBubble.querySelector('div:last-child').innerHTML = reply.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  } catch(e) {
+    thinkBubble.querySelector('div:last-child').textContent = 'Connection error. Please check your network and try again.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'SEND';
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// Build registry on load
+buildRegistry();
 </script>
 </body>
 </html>
