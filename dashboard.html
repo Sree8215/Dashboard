@@ -307,32 +307,47 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
           <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
       </defs>
+
+      <!-- Outer slow halo -->
       <circle cx="23" cy="23" r="21" fill="url(#sg3)" style="animation:halo 3.5s ease-in-out infinite"/>
+
+      <!-- Rotating outer rays (long, tapered) -->
       <g style="transform-origin:23px 23px;animation:raysOuter 12s linear infinite">
-        <ellipse cx="23" cy="4.5" rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(0   23 23)"/>
-        <ellipse cx="23" cy="4.5" rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(45  23 23)"/>
-        <ellipse cx="23" cy="4.5" rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(90  23 23)"/>
-        <ellipse cx="23" cy="4.5" rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(135 23 23)"/>
-        <ellipse cx="23" cy="4.5" rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(180 23 23)"/>
-        <ellipse cx="23" cy="4.5" rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(225 23 23)"/>
-        <ellipse cx="23" cy="4.5" rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(270 23 23)"/>
-        <ellipse cx="23" cy="4.5" rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(315 23 23)"/>
+        <ellipse cx="23" cy="4.5"  rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(0   23 23)"/>
+        <ellipse cx="23" cy="4.5"  rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(45  23 23)"/>
+        <ellipse cx="23" cy="4.5"  rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(90  23 23)"/>
+        <ellipse cx="23" cy="4.5"  rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(135 23 23)"/>
+        <ellipse cx="23" cy="4.5"  rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(180 23 23)"/>
+        <ellipse cx="23" cy="4.5"  rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(225 23 23)"/>
+        <ellipse cx="23" cy="4.5"  rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(270 23 23)"/>
+        <ellipse cx="23" cy="4.5"  rx="1.5" ry="3.5" fill="#f59e0b" opacity="0.55" transform="rotate(315 23 23)"/>
       </g>
+
+      <!-- Rotating inner rays (shorter, counter-rotate) -->
       <g style="transform-origin:23px 23px;animation:raysInner 8s linear infinite reverse">
-        <ellipse cx="23" cy="7" rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(22.5  23 23)"/>
-        <ellipse cx="23" cy="7" rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(67.5  23 23)"/>
-        <ellipse cx="23" cy="7" rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(112.5 23 23)"/>
-        <ellipse cx="23" cy="7" rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(157.5 23 23)"/>
-        <ellipse cx="23" cy="7" rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(202.5 23 23)"/>
-        <ellipse cx="23" cy="7" rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(247.5 23 23)"/>
-        <ellipse cx="23" cy="7" rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(292.5 23 23)"/>
-        <ellipse cx="23" cy="7" rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(337.5 23 23)"/>
+        <ellipse cx="23" cy="7"  rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(22.5  23 23)"/>
+        <ellipse cx="23" cy="7"  rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(67.5  23 23)"/>
+        <ellipse cx="23" cy="7"  rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(112.5 23 23)"/>
+        <ellipse cx="23" cy="7"  rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(157.5 23 23)"/>
+        <ellipse cx="23" cy="7"  rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(202.5 23 23)"/>
+        <ellipse cx="23" cy="7"  rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(247.5 23 23)"/>
+        <ellipse cx="23" cy="7"  rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(292.5 23 23)"/>
+        <ellipse cx="23" cy="7"  rx="1.1" ry="2.5" fill="#fcd34d" opacity="0.7" transform="rotate(337.5 23 23)"/>
       </g>
+
+      <!-- Glow ring -->
       <circle cx="23" cy="23" r="13.5" fill="url(#sg2)" style="animation:halo 3.5s ease-in-out infinite 0.3s"/>
+
+      <!-- Main body -->
       <circle cx="23" cy="23" r="10.5" fill="url(#sg1)" filter="url(#glow)" style="animation:pulse 3s ease-in-out infinite"/>
+
+      <!-- Specular highlight -->
       <ellipse cx="20" cy="19.5" rx="3.2" ry="2" fill="white" opacity="0.28" style="animation:pulse 3s ease-in-out infinite"/>
+
+      <!-- Subtle inner ring detail -->
       <circle cx="23" cy="23" r="10.5" fill="none" stroke="#fde68a" stroke-width="0.6" opacity="0.4"/>
     </svg>
+
     <div>
       <div class="logo-mark" style="font-size:16px;letter-spacing:.5px">SONNE</div>
       <div class="logo-sub" style="letter-spacing:2.5px">Construction Intelligence</div>
@@ -378,7 +393,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
     </div>
     <div class="nav-item" data-page="assistant" onclick="nav(this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
-      SONNE
+      AI Assistant
     </div>
   </div>
   <div class="status-bar">
@@ -684,10 +699,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;height:calc(100vh - 160px)">
         <div style="display:flex;flex-direction:column;gap:14px">
           <div class="grid4">
-            <div class="stat"><div class="stat-label">Overall</div><div class="stat-val">68%</div><div class="stat-sub">On schedule</div></div>
-            <div class="stat"><div class="stat-label">Days Ahead</div><div class="stat-val" style="color:var(--red)">-3</div><div class="stat-sub">vs baseline</div></div>
-            <div class="stat"><div class="stat-label">Tasks Done</div><div class="stat-val" style="color:var(--green)">142</div><div class="stat-sub">of 210 total</div></div>
-            <div class="stat"><div class="stat-label">Critical Path</div><div class="stat-val" style="color:var(--amber)">4</div><div class="stat-sub">items at risk</div></div>
+            <div class="stat"><div class="stat-label">Overall</div><div class="stat-val">3%</div><div class="stat-sub">Just started</div></div>
+            <div class="stat"><div class="stat-label">Data Date</div><div class="stat-val" style="font-size:14px;color:var(--amber)">May '29</div><div class="stat-sub">05/21/2029</div></div>
+            <div class="stat"><div class="stat-label">Tasks Active</div><div class="stat-val" style="color:var(--green)">2</div><div class="stat-sub">of 60 total</div></div>
+            <div class="stat"><div class="stat-label">Critical Path</div><div class="stat-val" style="color:var(--red)">6</div><div class="stat-sub">items flagged</div></div>
           </div>
           <!-- GANTT -->
           <div class="card" style="flex:1;overflow:hidden">
@@ -695,11 +710,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
             <div class="card-body" style="overflow-y:auto;height:calc(100% - 42px)">
               <div class="gantt-header">
                 <div class="gantt-header-label"></div>
-                <div class="gantt-months">
-                  <div class="gantt-month">JAN</div><div class="gantt-month">FEB</div>
-                  <div class="gantt-month">MAR</div><div class="gantt-month">APR</div>
+                  <div class="gantt-months">
                   <div class="gantt-month">MAY</div><div class="gantt-month">JUN</div>
                   <div class="gantt-month">JUL</div><div class="gantt-month">AUG</div>
+                  <div class="gantt-month">SEP</div><div class="gantt-month">OCT</div>
+                  <div class="gantt-month">NOV</div><div class="gantt-month">DEC</div>
                 </div>
               </div>
               <!-- Gantt rows: [label, planStart%, planWidth%, actualStart%, actualWidth%, status] -->
@@ -712,23 +727,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
           <div class="card">
             <div class="card-header"><span class="card-title">Work Packages</span></div>
             <div class="card-body">
-              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">Substructure</span><span class="prog-pct">100%</span></div><div class="prog-track"><div class="prog-fill done" style="width:100%"></div></div></div>
-              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">RC Frame — L1–L8</span><span class="prog-pct">100%</span></div><div class="prog-track"><div class="prog-fill done" style="width:100%"></div></div></div>
-              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">RC Frame — L9–L16</span><span class="prog-pct">72%</span></div><div class="prog-track"><div class="prog-fill" style="width:72%"></div></div></div>
-              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">RC Frame — L17–L22</span><span class="prog-pct">18%</span></div><div class="prog-track"><div class="prog-fill" style="width:18%"></div></div></div>
-              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">MEP Rough-In</span><span class="prog-pct" style="color:var(--red)">43%</span></div><div class="prog-track"><div class="prog-fill late" style="width:43%"></div></div></div>
-              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">Façade Cladding</span><span class="prog-pct">31%</span></div><div class="prog-track"><div class="prog-fill" style="width:31%"></div></div></div>
-              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">Internal Fit-Out</span><span class="prog-pct">8%</span></div><div class="prog-track"><div class="prog-fill" style="width:8%"></div></div></div>
-              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">Testing & Commissioning</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">A. Substructure — Base</span><span class="prog-pct" style="color:var(--amber)">20%</span></div><div class="prog-track"><div class="prog-fill" style="width:20%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">B. Shell — Base Level</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">B. Shell — Ground Floor</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">B. Shell — First Floor</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">B. Shell — Second Floor</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">C. Interiors — All Floors</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">D. Services & MEP</span><span class="prog-pct" style="color:var(--red)">0%</span></div><div class="prog-track"><div class="prog-fill late" style="width:0%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">E. Equipment & Furniture</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span class="prog-name">F. Specialty (Façade, Sundial, Skylight)</span><span class="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
             </div>
           </div>
           <div class="card">
             <div class="card-header"><span class="card-title">Critical Path Risks</span></div>
             <div class="card-body" style="padding:10px 14px">
-              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--red);font-family:var(--mono)">01</span><div><div>MEP Rough-In — 4 days behind</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Impacts L9–L16 handover</div></div></div>
-              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">02</span><div><div>Façade Cladding material delayed</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Supplier delay: 2 weeks</div></div></div>
-              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">03</span><div><div>L17–L22 formwork allocation</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Crew availability constraint</div></div></div>
-              <div style="font-size:12px;color:var(--text);padding:6px 0;display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">04</span><div><div>Crane access conflict — July 3–7</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Overlapping tower crane work</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--red);font-family:var(--mono)">01</span><div><div>Dewatering & Cut — Base Level</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Critical path · IDs 14, 13 · 9+ days remaining</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--red);font-family:var(--mono)">02</span><div><div>MEP Horizontal Rack — All Floors</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Critical path · IDs 49, 150, 186 · 15–20 days each</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--red);font-family:var(--mono)">03</span><div><div>MEP Vertical — All Floors</div><div style="font-size:10px;color:var(--text3);margin-top:2px">Critical path · IDs 102, 151, 187 · 15–20 days each</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">04</span><div><div>Interior Walls — All Floors (15 days each)</div><div style="font-size:10px;color:var(--text3);margin-top:2px">IDs 114, 141, 178 · Aug–Sep window</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">05</span><div><div>Façade — Ground & First Floor (20 days each)</div><div style="font-size:10px;color:var(--text3);margin-top:2px">IDs 79, 164, 200 · Jul–Oct window</div></div></div>
+              <div style="font-size:12px;color:var(--text);padding:6px 0;display:flex;align-items:flex-start;gap:6px"><span style="color:var(--amber);font-family:var(--mono)">06</span><div><div>Elevator Shaft — Second Floor (10 days)</div><div style="font-size:10px;color:var(--text3);margin-top:2px">ID 193 · Jul window · Drives 2F completion</div></div></div>
             </div>
           </div>
         </div>
@@ -1119,7 +1137,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
               <svg width="16" height="16" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
             </div>
             <div>
-              <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text)">SONNE</div>
+              <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text)">Site Intelligence Assistant</div>
               <div style="font-size:10px;color:var(--text3)">Ask about any building component, robot scan, employee or inspection</div>
             </div>
             <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
@@ -1591,20 +1609,40 @@ document.addEventListener('DOMContentLoaded', function(){ setTimeout(buildAsBuil
 // GANTT CHART
 function buildGantt() {
   const tasks = [
-    ['Piling & Substructure',0,20,0,20,'done'],
-    ['Ground Beams',15,15,15,15,'done'],
-    ['RC Frame L1–L4',20,15,22,14,'done'],
-    ['RC Frame L5–L8',32,16,35,15,'done'],
-    ['RC Frame L9–L12',45,16,48,12,'active'],
-    ['RC Frame L13–L16',55,16,0,0,'upcoming'],
-    ['RC Frame L17–L22',65,20,0,0,'upcoming'],
-    ['MEP Rough-In L1–L8',30,25,32,18,'late'],
-    ['MEP Rough-In L9+',55,25,0,0,'upcoming'],
-    ['External Cladding',50,30,52,10,'active'],
-    ['Waterproofing',35,20,37,18,'done'],
-    ['Internal Fit-Out',60,30,0,0,'upcoming'],
-    ['M&E Commissioning',80,12,0,0,'upcoming'],
-    ['Practical Completion',92,8,0,0,'upcoming'],
+    // label, planStart%, planWidth%, actualStart%, actualWidth%, status
+    // BASE LEVEL — A. Substructure (May 2029, CRITICAL)
+    ['Base — Dewatering & Cut',       0, 7,   0, 3,  'late'],
+    ['Base — Fill',                   3, 4,   0, 0,  'upcoming'],
+    // BASE LEVEL — B. Shell (May–Jul)
+    ['Base — Boreholes & Steel Piles',10,10,  0, 0,  'upcoming'],
+    ['Base — RC Beams & Slab',        18,10,  0, 0,  'upcoming'],
+    ['Base — Retaining Walls',        25, 4,  0, 0,  'upcoming'],
+    // GROUND FLOOR — Shell (Jul)
+    ['GF — Columns, Beams & Slab',   25,12,  0, 0,  'upcoming'],
+    // GROUND FLOOR — Interiors (Aug–Sep)
+    ['GF — Interiors',               37,18,  0, 0,  'upcoming'],
+    // GROUND FLOOR — Services (Jul–Sep, CRITICAL)
+    ['GF — MEP & Services',          25,25,  0, 0,  'late'],
+    // GROUND FLOOR — Specialty (Jul–Sep)
+    ['GF — Façade & Sundial',        25,24,  0, 0,  'upcoming'],
+    // FIRST FLOOR — Early shell (May–Jun)
+    ['1F — Beams & Floor Slab',      10, 8,  0, 0,  'upcoming'],
+    // FIRST FLOOR — Main shell + interiors (Jun–Sep, CRITICAL MEP)
+    ['1F — Interiors & MEP',         18,37,  0, 0,  'late'],
+    // FIRST FLOOR — Upper shell (Aug–Sep)
+    ['1F — Columns & Upper Shell',   50,15,  0, 0,  'upcoming'],
+    // FIRST FLOOR — Specialty
+    ['1F — Façade',                  18,14,  0, 0,  'upcoming'],
+    // SECOND FLOOR — Shell (May–Aug, runs early)
+    ['2F — Shell & Elevator Shaft',  10,27,  0, 0,  'upcoming'],
+    // SECOND FLOOR — Interiors + Services (Jun–Sep, CRITICAL)
+    ['2F — Interiors & MEP',         13,38,  0, 0,  'late'],
+    // SECOND FLOOR — PV Panels
+    ['2F — PV Panels',               13, 6,  0, 0,  'upcoming'],
+    // SECOND FLOOR — Specialty
+    ['2F — Façade, Sundial & Skylight',18,24, 0, 0, 'upcoming'],
+    // ALL FLOORS — Equipment & Furniture (Sep–Nov)
+    ['All Floors — Equipment & Furniture',50,26, 0, 0,'upcoming'],
   ];
   const colors={'done':'var(--green)','late':'var(--red)','active':'var(--amber)','upcoming':'var(--border2)'};
   const cont = document.getElementById('ganttContainer');
@@ -2005,8 +2043,6 @@ async function sendChat() {
 
 // Build registry on load
 buildRegistry();
-  
-  var _g=sessionStorage.getItem('goto');if(_g){sessionStorage.removeItem('goto');var _n=document.querySelector('.nav-item[data-page="'+_g+'"]');if(_n)nav(_n);}
 </script>
 </body>
 </html>
