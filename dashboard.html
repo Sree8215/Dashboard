@@ -2007,13 +2007,12 @@ async function sendChat() {
 buildRegistry();
   
   // Auto-navigate to tab from URL hash
-(function(){
+window.addEventListener('load', function(){
   var hash = window.location.hash.replace('#','');
-  if(hash){
-    var item = document.querySelector('.nav-item[data-page="'+hash+'"]');
-    if(item) setTimeout(function(){ nav(item); }, 100);
-  }
-})();
+  if(!hash) return;
+  var item = document.querySelector('.nav-item[data-page="'+hash+'"]');
+  if(item) setTimeout(function(){ nav(item); }, 500);
+});
 </script>
 </body>
 </html>
