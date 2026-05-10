@@ -2006,13 +2006,7 @@ async function sendChat() {
 // Build registry on load
 buildRegistry();
   
-  // Auto-navigate to tab from URL hash
-window.addEventListener('load', function(){
-  var hash = window.location.hash.replace('#','');
-  if(!hash) return;
-  var item = document.querySelector('.nav-item[data-page="'+hash+'"]');
-  if(item) setTimeout(function(){ nav(item); }, 500);
-});
+  var _g=sessionStorage.getItem('goto');if(_g){sessionStorage.removeItem('goto');var _n=document.querySelector('.nav-item[data-page="'+_g+'"]');if(_n)nav(_n);}
 </script>
 </body>
 </html>
