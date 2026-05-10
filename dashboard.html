@@ -2005,6 +2005,15 @@ async function sendChat() {
 
 // Build registry on load
 buildRegistry();
+  
+  // Auto-navigate to tab from URL hash
+(function(){
+  var hash = window.location.hash.replace('#','');
+  if(hash){
+    var item = document.querySelector('.nav-item[data-page="'+hash+'"]');
+    if(item) setTimeout(function(){ nav(item); }, 100);
+  }
+})();
 </script>
 </body>
 </html>
